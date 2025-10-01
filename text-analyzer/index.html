@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Text Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ TEXT ANALYZER ◆</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ INPUT TEXT ◣</span>
+                </div>
+                <div class="panel-content">
+                    <textarea 
+                        id="textInput" 
+                        class="text-area pixel-text" 
+                        placeholder="Type or paste your text here...&#10;&#10;OR&#10;&#10;Upload a file below!"
+                        rows="12"
+                    ></textarea>
+                    
+                    <div class="file-upload-section">
+                        <label for="fileInput" class="btn pixel-btn upload-btn">
+                            <span class="btn-icon">▲</span> UPLOAD FILE
+                        </label>
+                        <input type="file" id="fileInput" accept=".txt,.pdf,.doc,.docx" hidden>
+                        <span id="fileName" class="file-name"></span>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="analyzeBtn" class="btn pixel-btn primary-btn">
+                            <span class="btn-icon">►</span> ANALYZE
+                        </button>
+                        <button id="clearBtn" class="btn pixel-btn secondary-btn">
+                            <span class="btn-icon">✕</span> CLEAR
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <!-- Basic Counts -->
+                <div class="stat-group pixel-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">◢ BASIC STATS ◣</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">WORDS</span>
+                                <span class="stat-value" id="wordCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">CHARACTERS</span>
+                                <span class="stat-value" id="charCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">CHARS (NO SPACES)</span>
+                                <span class="stat-value" id="charNoSpaceCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">LINES</span>
+                                <span class="stat-value" id="lineCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">PARAGRAPHS</span>
+                                <span class="stat-value" id="paragraphCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">SENTENCES</span>
+                                <span class="stat-value" id="sentenceCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Counts -->
+                <div class="stat-group pixel-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">◢ ADVANCED STATS ◣</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">UNIQUE WORDS</span>
+                                <span class="stat-value" id="uniqueWordCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">AVG WORD LENGTH</span>
+                                <span class="stat-value" id="avgWordLength">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">AVG SENTENCE LENGTH</span>
+                                <span class="stat-value" id="avgSentenceLength">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">LONGEST WORD</span>
+                                <span class="stat-value" id="longestWord">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">SHORTEST WORD</span>
+                                <span class="stat-value" id="shortestWord">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">SYLLABLES</span>
+                                <span class="stat-value" id="syllableCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tokens & Time -->
+                <div class="stat-group pixel-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">◢ TOKENS & TIME ◣</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">APPROX TOKENS</span>
+                                <span class="stat-value" id="tokenCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">READING TIME</span>
+                                <span class="stat-value" id="readingTime">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">SPEAKING TIME</span>
+                                <span class="stat-value" id="speakingTime">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Readability -->
+                <div class="stat-group pixel-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">◢ READABILITY ◣</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">FLESCH READING EASE</span>
+                                <span class="stat-value" id="fleschReading">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">FLESCH-KINCAID GRADE</span>
+                                <span class="stat-value" id="fleschGrade">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Character Analysis -->
+                <div class="stat-group pixel-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">◢ CHARACTER ANALYSIS ◣</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">WHITESPACE</span>
+                                <span class="stat-value" id="whitespaceCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">PUNCTUATION</span>
+                                <span class="stat-value" id="punctuationCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">UPPERCASE</span>
+                                <span class="stat-value" id="uppercaseCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">LOWERCASE</span>
+                                <span class="stat-value" id="lowercaseCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">NUMBERS</span>
+                                <span class="stat-value" id="numberCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Most Common Words -->
+                <div class="stat-group pixel-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">◢ TOP 10 WORDS ◣</span>
+                    </div>
+                    <div class="panel-content">
+                        <div id="topWords" class="top-words"></div>
+                    </div>
+                </div>
+
+                <!-- Letter Frequency -->
+                <div class="stat-group pixel-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">◢ LETTER FREQUENCY ◣</span>
+                    </div>
+                    <div class="panel-content">
+                        <div id="letterFreq" class="letter-freq"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ RETRO TEXT ANALYZER v1.0 ▼</p>
+            <p class="footer-note">Supports TXT, PDF, DOC, DOCX files</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
