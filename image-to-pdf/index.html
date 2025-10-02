@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>◆ IMAGE TO PDF ◆</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ IMAGE TO PDF CONVERTER ◆</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ UPLOAD IMAGES ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">🖼️</div>
+                        <h3>DROP IMAGES HERE</h3>
+                        <p>or click to select</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Supports: PNG, JPG, JPEG, GIF, BMP</p>
+                        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                    </div>
+                    
+                    <div id="statusMessage"></div>
+                    
+                    <div id="previewContainer" class="preview-container hidden"></div>
+                    
+                    <div class="action-buttons hidden" id="actionButtons">
+                        <button id="clearBtn" class="btn secondary-btn">
+                            <span class="btn-icon">✕</span> CLEAR ALL
+                        </button>
+                        <button id="convertBtn" class="btn primary-btn">
+                            <span class="btn-icon">▼</span> CONVERT TO PDF
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Options Section -->
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ PDF OPTIONS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div style="display: grid; gap: 16px;">
+                        <div>
+                            <label for="pageSize" style="display: block; margin-bottom: 8px; font-weight: bold;">PAGE SIZE:</label>
+                            <select id="pageSize" class="input-field" style="width: auto; min-width: 200px;">
+                                <option value="a4">A4</option>
+                                <option value="letter">Letter</option>
+                                <option value="legal">Legal</option>
+                                <option value="a3">A3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="orientation" style="display: block; margin-bottom: 8px; font-weight: bold;">ORIENTATION:</label>
+                            <select id="orientation" class="input-field" style="width: auto; min-width: 200px;">
+                                <option value="portrait">Portrait</option>
+                                <option value="landscape">Landscape</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="imagePerPage" style="display: block; margin-bottom: 8px; font-weight: bold;">IMAGES PER PAGE:</label>
+                            <select id="imagePerPage" class="input-field" style="width: auto; min-width: 200px;">
+                                <option value="1">1 Image per Page</option>
+                                <option value="2">2 Images per Page</option>
+                                <option value="4">4 Images per Page</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ IMAGE TO PDF CONVERTER v1.0 ▼</p>
+            <p class="footer-note">Batch convert multiple images into a single PDF</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
