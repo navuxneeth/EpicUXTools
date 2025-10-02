@@ -1,4 +1,4 @@
-# epicTools
+# EpicUXTools
 
 A collection of useful web-based tools for UX designers with retro pixel 8-bit ASCII aesthetics. All tools work directly in your browser with no setup required!
 
