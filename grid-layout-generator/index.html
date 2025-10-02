@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRID LAYOUT GENERATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+        .control-group label {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        .control-group input, .control-group select {
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+            font-family: 'Courier New', 'Courier', monospace;
+        }
+        .grid-preview {
+            border: 2px dashed var(--color-border);
+            padding: var(--space-lg);
+            background: var(--color-input-bg);
+            min-height: 400px;
+            overflow: auto;
+        }
+        .grid-container {
+            display: grid;
+            gap: 10px;
+            min-height: 300px;
+        }
+        .grid-item {
+            background: var(--color-primary);
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .code-output {
+            background: var(--color-bg-alt);
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            font-family: 'Courier New', 'Courier', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">GRID LAYOUT GENERATOR</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">GRID SETTINGS</span>
+                </div>
+                <div class="panel-content">
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label for="columns">COLUMNS:</label>
+                            <input type="number" id="columns" min="1" max="12" value="3">
+                        </div>
+                        <div class="control-group">
+                            <label for="rows">ROWS:</label>
+                            <input type="number" id="rows" min="1" max="12" value="3">
+                        </div>
+                        <div class="control-group">
+                            <label for="gap">GAP (px):</label>
+                            <input type="number" id="gap" min="0" max="50" value="10">
+                        </div>
+                        <div class="control-group">
+                            <label for="columnTemplate">COLUMN SIZING:</label>
+                            <select id="columnTemplate">
+                                <option value="equal">Equal (1fr)</option>
+                                <option value="auto">Auto</option>
+                                <option value="minmax">Minmax (200px, 1fr)</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="rowTemplate">ROW SIZING:</label>
+                            <select id="rowTemplate">
+                                <option value="equal">Equal (1fr)</option>
+                                <option value="auto">Auto</option>
+                                <option value="minmax">Minmax (100px, 1fr)</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">PREVIEW</span>
+                </div>
+                <div class="panel-content">
+                    <div class="grid-preview">
+                        <div id="gridContainer" class="grid-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">CSS CODE</span>
+                </div>
+                <div class="panel-content">
+                    <div id="codeOutput" class="code-output"></div>
+                    <div class="action-buttons">
+                        <button id="copyBtn" class="btn primary-btn">COPY CSS</button>
+                        <button id="downloadBtn" class="btn secondary-btn">DOWNLOAD CSS</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>GRID LAYOUT GENERATOR v1.0</p>
+            <p class="footer-note">Generate CSS Grid layouts visually</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
