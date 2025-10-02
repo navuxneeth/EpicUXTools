@@ -65,17 +65,7 @@ Analyze text for word count, readability, and statistics.
   - Dark retro theme
 - **Location:** `/text-analyzer/index.html`
 
-### 7. Real3D Stereo Maker
-Create stereoscopic 3D images for Real3D polarized glasses.
-- **Features:**
-  - Side-by-side stereo image creation
-  - Multiple viewing modes
-  - Alignment and depth controls
-  - Export in various formats
-  - Light modern theme
-- **Location:** `/reald-3d-stereo-maker/index.html`
-
-### 8. Color Palette Generator
+### 7. Color Palette Generator
 Generate harmonious color schemes from a base color using different algorithms.
 - **Features:**
   - Monochromatic, analogous, complementary schemes
@@ -85,7 +75,7 @@ Generate harmonious color schemes from a base color using different algorithms.
   - Copy individual or all hex codes
 - **Location:** `/color-palette-generator/index.html`
 
-### 9. Grid Layout Generator
+### 8. Grid Layout Generator
 Create CSS Grid layouts visually with real-time preview.
 - **Features:**
   - Customizable columns and rows
@@ -95,7 +85,7 @@ Create CSS Grid layouts visually with real-time preview.
   - Download or copy CSS
 - **Location:** `/grid-layout-generator/index.html`
 
-### 10. Typography Tester
+### 9. Typography Tester
 Preview and test font combinations with adjustable properties.
 - **Features:**
   - Multiple web-safe and Google Fonts
@@ -105,7 +95,7 @@ Preview and test font combinations with adjustable properties.
   - Export CSS properties
 - **Location:** `/typography-tester/index.html`
 
-### 11. Spacing Calculator
+### 10. Spacing Calculator
 Calculate consistent spacing scales for design systems.
 - **Features:**
   - Linear, Fibonacci, Golden Ratio scales
@@ -115,7 +105,7 @@ Calculate consistent spacing scales for design systems.
   - Configurable base value and steps
 - **Location:** `/spacing-calculator/index.html`
 
-### 12. Contrast Checker
+### 11. Contrast Checker
 Check WCAG color contrast ratios for accessibility compliance.
 - **Features:**
   - Real-time contrast ratio calculation
@@ -179,3 +169,8 @@ Works in all modern browsers:
 ## License
 
 Open source - feel free to use and modify!
+
+## Credit
+
+Authored by [Navaneeth Sankar K P](https://www.linkedin.com/in/navaneeth-sankar-k-p)
+Code assist by Claude Sonnet 4.5 
