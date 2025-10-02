@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>◆ EPIC TOOLS ◆</title>
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+        .tool-card {
+            border: 3px dashed var(--color-border);
+            padding: var(--space-lg);
+            background: var(--color-panel-bg);
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all 0.3s;
+            box-shadow: 3px 3px 0px var(--color-shadow);
+        }
+        .tool-card:hover {
+            background: var(--color-bg-alt);
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0px var(--color-shadow);
+        }
+        .tool-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: var(--space-md);
+        }
+        .tool-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: var(--space-sm);
+            text-align: center;
+        }
+        .tool-description {
+            font-size: 0.9rem;
+            color: var(--color-text-dim);
+            text-align: center;
+            line-height: 1.4;
+        }
+        .tool-badge {
+            display: inline-block;
+            background: var(--color-secondary);
+            color: white;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            margin-top: var(--space-sm);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ EPIC TOOLS ◆</h1>
+            <p class="subtitle">UX DESIGNER TOOLKIT - RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ SELECT A TOOL ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="tools-grid">
+                        <a href="image-to-pdf/index.html" class="tool-card">
+                            <div class="tool-icon">📄</div>
+                            <div class="tool-title">IMAGE TO PDF</div>
+                            <div class="tool-description">
+                                Combine multiple images into a single PDF document with customizable layouts
+                            </div>
+                            <div class="tool-badge">BATCH PROCESSING</div>
+                        </a>
+
+                        <a href="background-remover/index.html" class="tool-card">
+                            <div class="tool-icon">🎭</div>
+                            <div class="tool-title">BACKGROUND REMOVER</div>
+                            <div class="tool-description">
+                                Remove image backgrounds instantly using AI with live preview comparison
+                            </div>
+                            <div class="tool-badge">AI POWERED</div>
+                        </a>
+
+                        <a href="image-inverter/index.html" class="tool-card">
+                            <div class="tool-icon">🔄</div>
+                            <div class="tool-title">COLOR INVERTER</div>
+                            <div class="tool-description">
+                                Invert colors in images to create negative effects with instant preview
+                            </div>
+                            <div class="tool-badge">INSTANT</div>
+                        </a>
+
+                        <a href="format-converter/index.html" class="tool-card">
+                            <div class="tool-icon">🔧</div>
+                            <div class="tool-title">FORMAT CONVERTER</div>
+                            <div class="tool-description">
+                                Convert images between PNG, JPEG, and WEBP formats with quality control
+                            </div>
+                            <div class="tool-badge">BATCH PROCESSING</div>
+                        </a>
+
+                        <a href="image-resizer/index.html" class="tool-card">
+                            <div class="tool-icon">📐</div>
+                            <div class="tool-title">IMAGE RESIZER</div>
+                            <div class="tool-description">
+                                Resize images to preset or custom dimensions with aspect ratio control
+                            </div>
+                            <div class="tool-badge">BATCH PROCESSING</div>
+                        </a>
+
+                        <a href="text-analyzer/index.html" class="tool-card">
+                            <div class="tool-icon">📝</div>
+                            <div class="tool-title">TEXT ANALYZER</div>
+                            <div class="tool-description">
+                                Analyze text for word count, readability scores, and comprehensive statistics
+                            </div>
+                            <div class="tool-badge">DARK THEME</div>
+                        </a>
+
+                        <a href="reald-3d-stereo-maker/index.html" class="tool-card">
+                            <div class="tool-icon">👓</div>
+                            <div class="tool-title">3D STEREO MAKER</div>
+                            <div class="tool-description">
+                                Create stereoscopic 3D images for Real3D polarized glasses
+                            </div>
+                            <div class="tool-badge">PROFESSIONAL</div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel" style="margin-top: var(--space-xl);">
+                <div class="panel-header">
+                    <span class="panel-title">◢ FEATURES ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md);">
+                        <div style="text-align: center; padding: var(--space-md);">
+                            <div style="font-size: 2rem; margin-bottom: var(--space-sm);">🚀</div>
+                            <div style="font-weight: bold; color: var(--color-primary);">NO SETUP</div>
+                            <div style="font-size: 0.9rem; color: var(--color-text-dim);">Works instantly in browser</div>
+                        </div>
+                        <div style="text-align: center; padding: var(--space-md);">
+                            <div style="font-size: 2rem; margin-bottom: var(--space-sm);">🔒</div>
+                            <div style="font-weight: bold; color: var(--color-primary);">PRIVACY FIRST</div>
+                            <div style="font-size: 0.9rem; color: var(--color-text-dim);">All processing is local</div>
+                        </div>
+                        <div style="text-align: center; padding: var(--space-md);">
+                            <div style="font-size: 2rem; margin-bottom: var(--space-sm);">📦</div>
+                            <div style="font-weight: bold; color: var(--color-primary);">BATCH SUPPORT</div>
+                            <div style="font-size: 0.9rem; color: var(--color-text-dim);">Process multiple files</div>
+                        </div>
+                        <div style="text-align: center; padding: var(--space-md);">
+                            <div style="font-size: 2rem; margin-bottom: var(--space-sm);">🎨</div>
+                            <div style="font-weight: bold; color: var(--color-primary);">RETRO THEME</div>
+                            <div style="font-size: 0.9rem; color: var(--color-text-dim);">8-bit ASCII aesthetic</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ EPIC TOOLS v1.0 ▼</p>
+            <p class="footer-note">Professional UX designer toolkit - No installation required</p>
+        </footer>
+    </div>
+</body>
+</html>
