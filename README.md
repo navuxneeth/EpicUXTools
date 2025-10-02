@@ -1,6 +1,9 @@
 # EpicUXTools
 
-A collection of useful web-based tools for UX designers with retro pixel 8-bit ASCII aesthetics. All tools work directly in your browser with no setup required!
+A collection of useful web-based tools for UX designers with retro pixel 8-bit ASCII aesthetics. All tools work directly in your browser with no setup required.
+
+<img width="1280" height="1995" alt="image" src="https://github.com/user-attachments/assets/3e82d556-1b92-492c-bcb0-52bf36f3fb1c" />
+<img width="1280" height="1130" alt="image" src="https://github.com/user-attachments/assets/e9c46c95-9a1b-4a0a-aea5-aa086f32d9cc" />
 
 ## Tools Collection
 
