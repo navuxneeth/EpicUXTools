@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>◆ VIDEO EDITOR ◆</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .video-preview {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--color-input-bg);
+            border: 3px dashed var(--color-border);
+            padding: var(--space-md);
+        }
+        
+        .video-preview video {
+            width: 100%;
+            display: block;
+            background: black;
+        }
+        
+        .tool-tabs {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+        }
+        
+        .tool-tab {
+            background: var(--color-card);
+            border: 2px solid var(--color-border);
+            padding: var(--space-sm) var(--space-md);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tool-tab:hover {
+            background: var(--color-bg-alt);
+        }
+        
+        .tool-tab.active {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .tool-section {
+            display: none;
+        }
+        
+        .tool-section.active {
+            display: block;
+        }
+        
+        .controls-grid {
+            display: grid;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .control-label {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .timeline {
+            width: 100%;
+            height: 60px;
+            background: var(--color-input-bg);
+            border: 2px dashed var(--color-border);
+            position: relative;
+            margin-top: var(--space-md);
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--color-accent);
+            cursor: ew-resize;
+        }
+        
+        .video-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+            padding: var(--space-md);
+            background: var(--color-card);
+            border: 2px dashed var(--color-border);
+        }
+        
+        .info-item {
+            text-align: center;
+        }
+        
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--color-text-dim);
+        }
+        
+        .info-value {
+            font-size: 1.2rem;
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ VIDEO EDITOR ◆</h1>
+            <p class="subtitle">RETRO PIXEL EDITION - LIVE PREVIEW</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ UPLOAD VIDEO ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">🎬</div>
+                        <h3>DROP VIDEO HERE</h3>
+                        <p>or click to select</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Supports: MP4, WEBM, OGG, MOV</p>
+                        <input type="file" id="fileInput" accept="video/*" hidden>
+                    </div>
+                    
+                    <div id="statusMessage"></div>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="pixel-panel hidden" id="previewSection">
+                <div class="panel-header">
+                    <span class="panel-title">◢ LIVE PREVIEW ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="video-preview">
+                        <video id="videoPreview" controls></video>
+                    </div>
+                    
+                    <div class="video-info" id="videoInfo">
+                        <div class="info-item">
+                            <div class="info-label">DURATION</div>
+                            <div class="info-value" id="infoDuration">0:00</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">RESOLUTION</div>
+                            <div class="info-value" id="infoResolution">0x0</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">SIZE</div>
+                            <div class="info-value" id="infoSize">0 MB</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">FORMAT</div>
+                            <div class="info-value" id="infoFormat">-</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools Section -->
+            <section class="pixel-panel hidden" id="toolsSection">
+                <div class="panel-header">
+                    <span class="panel-title">◢ EDITING TOOLS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="tool-tabs">
+                        <button class="tool-tab active" data-tool="trim">✂ TRIM</button>
+                        <button class="tool-tab" data-tool="crop">⬚ CROP</button>
+                        <button class="tool-tab" data-tool="speed">⚡ SPEED</button>
+                        <button class="tool-tab" data-tool="reverse">↩ REVERSE</button>
+                        <button class="tool-tab" data-tool="merge">⊕ MERGE</button>
+                    </div>
+
+                    <!-- Trim Tool -->
+                    <div class="tool-section active" id="trimTool">
+                        <h3 style="color: var(--color-primary); margin-bottom: var(--space-md);">TRIM VIDEO</h3>
+                        <div class="controls-grid">
+                            <div class="control-group">
+                                <label class="control-label">START TIME (seconds):</label>
+                                <input type="number" id="trimStart" class="input-field" min="0" step="0.1" value="0">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">END TIME (seconds):</label>
+                                <input type="number" id="trimEnd" class="input-field" min="0" step="0.1" value="0">
+                            </div>
+                            <div class="timeline" id="trimTimeline">
+                                <div class="timeline-marker" id="trimStartMarker" style="left: 0%;"></div>
+                                <div class="timeline-marker" id="trimEndMarker" style="left: 100%;"></div>
+                            </div>
+                            <button class="btn primary-btn" id="applyTrim">
+                                <span class="btn-icon">✂</span> APPLY TRIM
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Crop Tool -->
+                    <div class="tool-section" id="cropTool">
+                        <h3 style="color: var(--color-primary); margin-bottom: var(--space-md);">CROP VIDEO</h3>
+                        <div class="controls-grid">
+                            <div class="control-group">
+                                <label class="control-label">CROP PRESET:</label>
+                                <select id="cropPreset" class="input-field">
+                                    <option value="custom">CUSTOM</option>
+                                    <option value="16:9">16:9 (WIDESCREEN)</option>
+                                    <option value="9:16">9:16 (PORTRAIT)</option>
+                                    <option value="1:1">1:1 (SQUARE)</option>
+                                    <option value="4:3">4:3 (STANDARD)</option>
+                                </select>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                                <div class="control-group">
+                                    <label class="control-label">WIDTH (px):</label>
+                                    <input type="number" id="cropWidth" class="input-field" min="1" value="640">
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">HEIGHT (px):</label>
+                                    <input type="number" id="cropHeight" class="input-field" min="1" value="360">
+                                </div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                                <div class="control-group">
+                                    <label class="control-label">X OFFSET (px):</label>
+                                    <input type="number" id="cropX" class="input-field" min="0" value="0">
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Y OFFSET (px):</label>
+                                    <input type="number" id="cropY" class="input-field" min="0" value="0">
+                                </div>
+                            </div>
+                            <button class="btn primary-btn" id="applyCrop">
+                                <span class="btn-icon">⬚</span> APPLY CROP
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Speed Tool -->
+                    <div class="tool-section" id="speedTool">
+                        <h3 style="color: var(--color-primary); margin-bottom: var(--space-md);">ADJUST SPEED</h3>
+                        <div class="controls-grid">
+                            <div class="control-group">
+                                <label class="control-label">SPEED PRESET:</label>
+                                <select id="speedPreset" class="input-field">
+                                    <option value="0.25">0.25x (VERY SLOW)</option>
+                                    <option value="0.5">0.5x (SLOW)</option>
+                                    <option value="0.75">0.75x (SLIGHTLY SLOW)</option>
+                                    <option value="1" selected>1.0x (NORMAL)</option>
+                                    <option value="1.25">1.25x (SLIGHTLY FAST)</option>
+                                    <option value="1.5">1.5x (FAST)</option>
+                                    <option value="2">2.0x (VERY FAST)</option>
+                                    <option value="custom">CUSTOM</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">CUSTOM SPEED (0.1x - 4.0x):</label>
+                                <input type="number" id="speedCustom" class="input-field" min="0.1" max="4" step="0.1" value="1">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">PREVIEW SPEED:</label>
+                                <input type="range" id="speedSlider" class="input-field" min="0.25" max="4" step="0.25" value="1" style="width: 100%;">
+                                <span id="speedValue" style="font-weight: bold; color: var(--color-primary);">1.0x</span>
+                            </div>
+                            <button class="btn primary-btn" id="applySpeed">
+                                <span class="btn-icon">⚡</span> APPLY SPEED
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Reverse Tool -->
+                    <div class="tool-section" id="reverseTool">
+                        <h3 style="color: var(--color-primary); margin-bottom: var(--space-md);">REVERSE VIDEO</h3>
+                        <div class="controls-grid">
+                            <p style="color: var(--color-text-dim);">
+                                This will reverse the video playback direction. Audio will also be reversed.
+                            </p>
+                            <button class="btn primary-btn" id="applyReverse">
+                                <span class="btn-icon">↩</span> REVERSE VIDEO
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Merge Tool -->
+                    <div class="tool-section" id="mergeTool">
+                        <h3 style="color: var(--color-primary); margin-bottom: var(--space-md);">MERGE VIDEOS</h3>
+                        <div class="controls-grid">
+                            <div class="upload-area" id="mergeUploadArea" style="min-height: 120px;">
+                                <div class="upload-icon" style="font-size: 2rem;">➕</div>
+                                <h4>ADD MORE VIDEOS</h4>
+                                <p>Click or drop additional videos to merge</p>
+                                <input type="file" id="mergeFileInput" accept="video/*" multiple hidden>
+                            </div>
+                            <div id="mergeVideosList"></div>
+                            <button class="btn primary-btn" id="applyMerge">
+                                <span class="btn-icon">⊕</span> MERGE VIDEOS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Action Buttons -->
+            <section class="pixel-panel hidden" id="actionsSection">
+                <div class="panel-header">
+                    <span class="panel-title">◢ ACTIONS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="action-buttons">
+                        <button id="clearBtn" class="btn secondary-btn">
+                            <span class="btn-icon">✕</span> CLEAR ALL
+                        </button>
+                        <button id="downloadBtn" class="btn primary-btn">
+                            <span class="btn-icon">⬇</span> DOWNLOAD VIDEO
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ VIDEO EDITOR v1.0 ▼</p>
+            <p class="footer-note">Edit videos with live preview - all processing happens in your browser</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

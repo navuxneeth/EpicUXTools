@@ -118,6 +118,34 @@ Check WCAG color contrast ratios for accessibility compliance.
   - Color swap functionality
 - **Location:** `/contrast-checker/index.html`
 
+### 12. Video Editor
+Edit videos with multiple tools and live preview capabilities.
+- **Features:**
+  - **Trim:** Cut videos from start to end time with timeline markers
+  - **Crop:** Crop video dimensions with preset aspect ratios (16:9, 9:16, 1:1, 4:3) or custom sizes
+  - **Speed Control:** Adjust playback speed from 0.25x to 4.0x with live preview
+  - **Reverse:** Reverse video playback direction
+  - **Merge:** Combine multiple video files into one
+  - Live preview with video info (duration, resolution, size, format)
+  - Supports MP4, WEBM, OGG, MOV formats
+  - Tab-based interface for easy tool switching
+- **Location:** `/video-tools/index.html`
+
+### 13. Audio Editor
+Edit audio files with comprehensive tools and waveform visualization.
+- **Features:**
+  - **Trim:** Cut audio from start to end time with interactive timeline
+  - **Crop:** Remove portions from beginning and/or end
+  - **Speed Control:** Adjust playback speed (0.1x-4.0x) with pitch preservation option
+  - **Reverse:** Reverse audio playback with Web Audio API processing
+  - **Merge:** Concatenate multiple audio files
+  - **Volume:** Adjust volume level (0-200%) with fade in/out effects
+  - Live waveform visualization
+  - Audio info display (duration, size, format, bitrate)
+  - Supports MP3, WAV, OGG, M4A, AAC formats
+  - Real-time preview of all edits
+- **Location:** `/audio-tools/index.html`
+
 ## Design Theme
 
 Tools feature a **retro pixel aesthetic** with VT323 monospace font and two available color themes:
@@ -155,6 +183,8 @@ Simply open any tool's `index.html` file in a modern web browser. All tools work
 
 - Pure HTML5, CSS3, and JavaScript
 - Canvas API for image processing
+- Web Audio API for audio processing and waveform visualization
+- HTML5 Video API for video playback and control
 - Various libraries for specific features:
   - jsPDF for PDF generation
   - JSZip for creating ZIP archives
