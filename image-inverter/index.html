@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>◆ IMAGE INVERTER ◆</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .preview-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .preview-box {
+            border: 3px dashed var(--color-border);
+            padding: 16px;
+            background: var(--color-input-bg);
+        }
+        .preview-box h4 {
+            text-align: center;
+            margin-bottom: 12px;
+            color: var(--color-primary);
+        }
+        .preview-box img {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+        }
+        @media (max-width: 768px) {
+            .preview-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ IMAGE COLOR INVERTER ◆</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ UPLOAD IMAGES ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">🖼️</div>
+                        <h3>DROP IMAGES HERE</h3>
+                        <p>or click to select</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Supports: PNG, JPG, JPEG, GIF, BMP</p>
+                        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                    </div>
+                    
+                    <div id="statusMessage"></div>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="pixel-panel hidden" id="previewSection">
+                <div class="panel-header">
+                    <span class="panel-title">◢ PREVIEW ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div id="currentImageInfo" style="text-align: center; margin-bottom: 16px; font-weight: bold;"></div>
+                    <div class="preview-comparison">
+                        <div class="preview-box">
+                            <h4>ORIGINAL</h4>
+                            <img id="originalImage" alt="Original">
+                        </div>
+                        <div class="preview-box">
+                            <h4>INVERTED</h4>
+                            <img id="invertedImage" alt="Inverted">
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons" style="margin-top: 20px;">
+                        <button id="prevBtn" class="btn secondary-btn">
+                            <span class="btn-icon">◀</span> PREVIOUS
+                        </button>
+                        <button id="downloadCurrentBtn" class="btn success-btn">
+                            <span class="btn-icon">▼</span> DOWNLOAD CURRENT
+                        </button>
+                        <button id="nextBtn" class="btn secondary-btn">
+                            <span class="btn-icon">▶</span> NEXT
+                        </button>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="downloadAllBtn" class="btn primary-btn">
+                            <span class="btn-icon">▼</span> DOWNLOAD ALL AS ZIP
+                        </button>
+                        <button id="clearBtn" class="btn secondary-btn">
+                            <span class="btn-icon">✕</span> CLEAR ALL
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ IMAGE COLOR INVERTER v1.0 ▼</p>
+            <p class="footer-note">Invert colors in images instantly - batch processing supported</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

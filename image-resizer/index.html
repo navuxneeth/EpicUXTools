@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>◆ IMAGE RESIZER ◆</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ IMAGE RESIZER ◆</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ UPLOAD IMAGES ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">🖼️</div>
+                        <h3>DROP IMAGES HERE</h3>
+                        <p>or click to select</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Supports: PNG, JPG, JPEG, GIF, BMP, WEBP</p>
+                        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                    </div>
+                    
+                    <div id="statusMessage"></div>
+                    
+                    <div id="previewContainer" class="preview-container hidden"></div>
+                    
+                    <div class="action-buttons hidden" id="actionButtons">
+                        <button id="clearBtn" class="btn secondary-btn">
+                            <span class="btn-icon">✕</span> CLEAR ALL
+                        </button>
+                        <button id="resizeBtn" class="btn primary-btn">
+                            <span class="btn-icon">►</span> RESIZE
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Options Section -->
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ RESIZE OPTIONS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div style="display: grid; gap: 16px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold;">RESIZE MODE:</label>
+                            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                                <label style="cursor: pointer;">
+                                    <input type="radio" name="resizeMode" value="preset" checked> PRESET SIZES
+                                </label>
+                                <label style="cursor: pointer;">
+                                    <input type="radio" name="resizeMode" value="custom"> CUSTOM SIZE
+                                </label>
+                                <label style="cursor: pointer;">
+                                    <input type="radio" name="resizeMode" value="percentage"> PERCENTAGE
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="presetOptions">
+                            <label for="presetSize" style="display: block; margin-bottom: 8px; font-weight: bold;">SELECT SIZE:</label>
+                            <select id="presetSize" class="input-field" style="width: auto; min-width: 250px;">
+                                <option value="3840x2160">4K UHD (3840×2160)</option>
+                                <option value="2560x1440">QHD (2560×1440)</option>
+                                <option value="1920x1080" selected>Full HD (1920×1080)</option>
+                                <option value="1280x720">HD (1280×720)</option>
+                                <option value="800x600">SVGA (800×600)</option>
+                                <option value="640x480">VGA (640×480)</option>
+                                <option value="1080x1080">Instagram Square (1080×1080)</option>
+                                <option value="1080x1920">Instagram Story (1080×1920)</option>
+                            </select>
+                        </div>
+                        
+                        <div id="customOptions" style="display: none;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold;">CUSTOM DIMENSIONS:</label>
+                            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                <input type="number" id="customWidth" placeholder="Width" class="input-field" style="width: 120px;" min="1">
+                                <span style="font-weight: bold;">×</span>
+                                <input type="number" id="customHeight" placeholder="Height" class="input-field" style="width: 120px;" min="1">
+                                <label style="cursor: pointer;">
+                                    <input type="checkbox" id="maintainAspect" checked> Maintain Aspect Ratio
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="percentageOptions" style="display: none;">
+                            <label for="percentage" style="display: block; margin-bottom: 8px; font-weight: bold;">SCALE TO (%):</label>
+                            <input type="range" id="percentage" min="10" max="200" value="50" class="input-field" style="width: 300px; max-width: 100%;">
+                            <span id="percentageValue" style="margin-left: 10px; font-weight: bold;">50%</span>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold;">OUTPUT FORMAT:</label>
+                            <select id="outputFormat" class="input-field" style="width: auto; min-width: 200px;">
+                                <option value="original">Keep Original Format</option>
+                                <option value="png">PNG</option>
+                                <option value="jpeg">JPEG</option>
+                                <option value="webp">WEBP</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ IMAGE RESIZER v1.0 ▼</p>
+            <p class="footer-note">Resize images to preset or custom dimensions - batch processing supported</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

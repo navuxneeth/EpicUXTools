@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>◆ FORMAT CONVERTER ◆</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ IMAGE FORMAT CONVERTER ◆</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ UPLOAD IMAGES ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">🖼️</div>
+                        <h3>DROP IMAGES HERE</h3>
+                        <p>or click to select</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Supports: PNG, JPG, JPEG, GIF, BMP, WEBP</p>
+                        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                    </div>
+                    
+                    <div id="statusMessage"></div>
+                    
+                    <div id="previewContainer" class="preview-container hidden"></div>
+                    
+                    <div class="action-buttons hidden" id="actionButtons">
+                        <button id="clearBtn" class="btn secondary-btn">
+                            <span class="btn-icon">✕</span> CLEAR ALL
+                        </button>
+                        <button id="convertBtn" class="btn primary-btn">
+                            <span class="btn-icon">►</span> CONVERT
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Options Section -->
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ CONVERSION OPTIONS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div style="display: grid; gap: 16px;">
+                        <div>
+                            <label for="outputFormat" style="display: block; margin-bottom: 8px; font-weight: bold;">OUTPUT FORMAT:</label>
+                            <select id="outputFormat" class="input-field" style="width: auto; min-width: 200px;">
+                                <option value="png">PNG</option>
+                                <option value="jpeg">JPEG</option>
+                                <option value="webp">WEBP</option>
+                            </select>
+                        </div>
+                        <div id="qualityOption" style="display: none;">
+                            <label for="quality" style="display: block; margin-bottom: 8px; font-weight: bold;">QUALITY (%):</label>
+                            <input type="range" id="quality" min="1" max="100" value="90" class="input-field" style="width: 300px; max-width: 100%;">
+                            <span id="qualityValue" style="margin-left: 10px; font-weight: bold;">90%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ IMAGE FORMAT CONVERTER v1.0 ▼</p>
+            <p class="footer-note">Convert images between different formats - batch processing supported</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
