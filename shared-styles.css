@@ -1,20 +1,30 @@
-/* Light Retro Pixel 8-bit ASCII Theme */
+/* VT323 Font */
+@font-face {
+    font-family: 'VT323';
+    src: url('./assets/VT323-Regular.ttf') format('truetype');
+}
+
+/* PixelOS Theme (Default) */
 :root {
-    /* Color Palette - Light Retro */
-    --color-bg: #f5f5dc;
-    --color-bg-alt: #fffacd;
-    --color-primary: #ff6b9d;
-    --color-secondary: #ffa500;
-    --color-accent: #4169e1;
-    --color-success: #32cd32;
-    --color-text: #2f4f4f;
-    --color-text-dim: #696969;
-    --color-border: #ff6b9d;
-    --color-panel-bg: #fffef0;
-    --color-panel-border: #ff6b9d;
-    --color-input-bg: #ffffff;
-    --color-shadow: rgba(255, 107, 157, 0.3);
-    --color-hover: #ff1493;
+    /* Color Palette - PixelOS */
+    --color-bg: #283238;
+    --color-text: #B6C2BF;
+    --color-card: #38454C;
+    --color-accent: #6AB0A2;
+    --color-accent-hover: #548C7F;
+    
+    /* Derived colors for consistency */
+    --color-bg-alt: #38454C;
+    --color-primary: #6AB0A2;
+    --color-secondary: #548C7F;
+    --color-success: #6AB0A2;
+    --color-text-dim: #8A9693;
+    --color-border: #6AB0A2;
+    --color-panel-bg: #38454C;
+    --color-panel-border: #6AB0A2;
+    --color-input-bg: #283238;
+    --color-shadow: rgba(106, 176, 162, 0.3);
+    --color-hover: #548C7F;
     
     /* Spacing */
     --space-xs: 4px;
@@ -28,6 +38,27 @@
     --border-style: dashed;
 }
 
+/* Ocean Theme (Alternative) */
+.theme-ocean {
+    --color-bg: #1a3a4a;
+    --color-text: #a6c3d1;
+    --color-card: #2a5b74;
+    --color-accent: #4aa9d5;
+    --color-accent-hover: #3b87ab;
+    
+    --color-bg-alt: #2a5b74;
+    --color-primary: #4aa9d5;
+    --color-secondary: #3b87ab;
+    --color-success: #4aa9d5;
+    --color-text-dim: #7a9bad;
+    --color-border: #4aa9d5;
+    --color-panel-bg: #2a5b74;
+    --color-panel-border: #4aa9d5;
+    --color-input-bg: #1a3a4a;
+    --color-shadow: rgba(74, 169, 213, 0.3);
+    --color-hover: #3b87ab;
+}
+
 /* Reset & Base */
 * {
     margin: 0;
@@ -36,19 +67,12 @@
 }
 
 body {
-    font-family: 'Courier New', 'Courier', monospace;
+    font-family: 'VT323', monospace;
     background-color: var(--color-bg);
     color: var(--color-text);
     line-height: 1.6;
     min-height: 100vh;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 4px,
-            rgba(255, 107, 157, 0.05) 4px,
-            rgba(255, 107, 157, 0.05) 8px
-        );
+    font-size: 18px;
 }
 
 /* Pixel Text Effect */
@@ -121,8 +145,8 @@ body {
 
 /* Buttons */
 .btn {
-    font-family: 'Courier New', 'Courier', monospace;
-    font-size: 1rem;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
     padding: var(--space-md) var(--space-lg);
     border: 2px solid var(--color-border);
     background: var(--color-panel-bg);
@@ -130,7 +154,6 @@ body {
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-weight: bold;
     transition: all 0.2s;
     box-shadow: 3px 3px 0px var(--color-shadow);
 }
@@ -181,8 +204,8 @@ body {
     background: var(--color-input-bg);
     color: var(--color-text);
     border: 2px dashed var(--color-border);
-    font-family: 'Courier New', 'Courier', monospace;
-    font-size: 1rem;
+    font-family: 'VT323', monospace;
+    font-size: 1.1rem;
     box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 

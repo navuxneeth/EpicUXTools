@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPACING CALCULATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .scale-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+        .control-group label {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        .control-group input, .control-group select {
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+            font-family: 'Courier New', 'Courier', monospace;
+        }
+        .spacing-preview {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        .spacing-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+        }
+        .spacing-label {
+            min-width: 100px;
+            font-weight: bold;
+        }
+        .spacing-value {
+            min-width: 80px;
+            font-family: 'Courier New', 'Courier', monospace;
+            color: var(--color-primary);
+        }
+        .spacing-box {
+            height: 40px;
+            background: var(--color-primary);
+            border: 2px solid var(--color-border);
+            transition: width 0.3s;
+        }
+        .code-section {
+            background: var(--color-bg-alt);
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            font-family: 'Courier New', 'Courier', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">SPACING CALCULATOR</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">SCALE SETTINGS</span>
+                </div>
+                <div class="panel-content">
+                    <div class="scale-inputs">
+                        <div class="control-group">
+                            <label for="baseValue">BASE VALUE (px):</label>
+                            <input type="number" id="baseValue" min="1" max="100" value="8">
+                        </div>
+                        <div class="control-group">
+                            <label for="scaleType">SCALE TYPE:</label>
+                            <select id="scaleType">
+                                <option value="linear">Linear</option>
+                                <option value="fibonacci">Fibonacci</option>
+                                <option value="golden">Golden Ratio</option>
+                                <option value="modular">Modular (1.5x)</option>
+                                <option value="custom">Custom Multiplier</option>
+                            </select>
+                        </div>
+                        <div class="control-group" id="multiplierGroup" style="display: none;">
+                            <label for="multiplier">MULTIPLIER:</label>
+                            <input type="number" id="multiplier" min="1" max="5" step="0.1" value="1.5">
+                        </div>
+                        <div class="control-group">
+                            <label for="steps">NUMBER OF STEPS:</label>
+                            <input type="number" id="steps" min="3" max="12" value="8">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">SPACING SCALE PREVIEW</span>
+                </div>
+                <div class="panel-content">
+                    <div id="spacingPreview" class="spacing-preview"></div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">CSS VARIABLES</span>
+                </div>
+                <div class="panel-content">
+                    <div id="codeOutput" class="code-section"></div>
+                    <div class="action-buttons">
+                        <button id="copyBtn" class="btn primary-btn">COPY CSS</button>
+                        <button id="downloadBtn" class="btn secondary-btn">DOWNLOAD CSS</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>SPACING CALCULATOR v1.0</p>
+            <p class="footer-note">Calculate consistent spacing scales for design systems</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

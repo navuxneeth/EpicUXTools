@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYPOGRAPHY TESTER</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Open+Sans:wght@300;400;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .controls-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+        .control-group label {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        .control-group input, .control-group select {
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+            font-family: 'Courier New', 'Courier', monospace;
+        }
+        .preview-section {
+            border: 2px dashed var(--color-border);
+            padding: var(--space-xl);
+            background: var(--color-input-bg);
+            min-height: 300px;
+        }
+        #previewText {
+            line-height: 1.6;
+        }
+        .font-samples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+        }
+        .font-sample {
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            cursor: pointer;
+            background: var(--color-input-bg);
+            transition: all 0.2s;
+        }
+        .font-sample:hover {
+            background: var(--color-bg-alt);
+            transform: scale(1.02);
+        }
+        .font-sample.active {
+            border-color: var(--color-primary);
+            background: var(--color-bg-alt);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">TYPOGRAPHY TESTER</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">FONT SELECTION</span>
+                </div>
+                <div class="panel-content">
+                    <div class="font-samples" id="fontSamples"></div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">TEXT SETTINGS</span>
+                </div>
+                <div class="panel-content">
+                    <div class="controls-section">
+                        <div class="control-group">
+                            <label for="fontSize">FONT SIZE (px):</label>
+                            <input type="number" id="fontSize" min="8" max="200" value="16">
+                        </div>
+                        <div class="control-group">
+                            <label for="fontWeight">FONT WEIGHT:</label>
+                            <select id="fontWeight">
+                                <option value="300">Light (300)</option>
+                                <option value="400" selected>Regular (400)</option>
+                                <option value="700">Bold (700)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="lineHeight">LINE HEIGHT:</label>
+                            <input type="number" id="lineHeight" min="1" max="3" step="0.1" value="1.6">
+                        </div>
+                        <div class="control-group">
+                            <label for="letterSpacing">LETTER SPACING (px):</label>
+                            <input type="number" id="letterSpacing" min="-5" max="20" step="0.5" value="0">
+                        </div>
+                    </div>
+                    <div class="control-group" style="margin-top: var(--space-md);">
+                        <label for="customText">CUSTOM TEXT:</label>
+                        <textarea id="customText" class="input-field" rows="3" placeholder="Type your text here...">The quick brown fox jumps over the lazy dog. ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789</textarea>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">PREVIEW</span>
+                </div>
+                <div class="panel-content">
+                    <div class="preview-section">
+                        <div id="previewText"></div>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="copyBtn" class="btn primary-btn">COPY CSS</button>
+                        <button id="resetBtn" class="btn secondary-btn">RESET</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>TYPOGRAPHY TESTER v1.0</p>
+            <p class="footer-note">Test and preview font styles for your designs</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTRAST CHECKER</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .color-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+        .color-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            padding: var(--space-md);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+        }
+        .color-input-group label {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        .color-input-wrapper {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: center;
+        }
+        .color-picker {
+            width: 60px;
+            height: 60px;
+            border: 2px dashed var(--color-border);
+            cursor: pointer;
+        }
+        .hex-input {
+            flex: 1;
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: white;
+            font-family: 'Courier New', 'Courier', monospace;
+            text-transform: uppercase;
+        }
+        .preview-section {
+            border: 2px dashed var(--color-border);
+            padding: var(--space-xl);
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+        }
+        .preview-text {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+        }
+        .result-card {
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            background: var(--color-input-bg);
+            text-align: center;
+        }
+        .result-title {
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: var(--space-sm);
+        }
+        .result-ratio {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: var(--space-sm) 0;
+        }
+        .result-status {
+            padding: var(--space-sm);
+            margin-top: var(--space-sm);
+            font-weight: bold;
+            border: 2px dashed;
+        }
+        .result-status.pass {
+            background: rgba(50, 205, 50, 0.1);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+        .result-status.fail {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: #ff0000;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">CONTRAST CHECKER</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">COLOR SELECTION</span>
+                </div>
+                <div class="panel-content">
+                    <div class="color-inputs">
+                        <div class="color-input-group">
+                            <label>FOREGROUND COLOR</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="fgColor" class="color-picker" value="#000000">
+                                <input type="text" id="fgHex" class="hex-input" value="#000000" maxlength="7">
+                            </div>
+                        </div>
+                        <div class="color-input-group">
+                            <label>BACKGROUND COLOR</label>
+                            <div class="color-input-wrapper">
+                                <input type="color" id="bgColor" class="color-picker" value="#FFFFFF">
+                                <input type="text" id="bgHex" class="hex-input" value="#FFFFFF" maxlength="7">
+                            </div>
+                        </div>
+                    </div>
+                    <button id="swapBtn" class="btn secondary-btn">SWAP COLORS</button>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">PREVIEW</span>
+                </div>
+                <div class="panel-content">
+                    <div id="previewSection" class="preview-section">
+                        <div class="preview-text" id="previewLarge">Sample Text Large</div>
+                        <div id="previewNormal">Sample text normal size for reading</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">WCAG COMPLIANCE RESULTS</span>
+                </div>
+                <div class="panel-content">
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-title">CONTRAST RATIO</div>
+                            <div class="result-ratio" id="contrastRatio">-</div>
+                            <div style="font-size: 0.8rem; color: var(--color-text-dim);">Required: 4.5:1 (AA) / 7:1 (AAA)</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-title">NORMAL TEXT</div>
+                            <div id="normalAAResult" class="result-status">-</div>
+                            <div id="normalAAAResult" class="result-status">-</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-title">LARGE TEXT</div>
+                            <div id="largeAAResult" class="result-status">-</div>
+                            <div id="largeAAAResult" class="result-status">-</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>CONTRAST CHECKER v1.0</p>
+            <p class="footer-note">Check WCAG color contrast ratios for accessibility</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

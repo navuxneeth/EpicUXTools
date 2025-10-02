@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COLOR PALETTE GENERATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .color-input-section {
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+        }
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        .color-picker {
+            width: 60px;
+            height: 60px;
+            border: 2px dashed var(--color-border);
+            cursor: pointer;
+        }
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+        .color-swatch {
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            text-align: center;
+            background: var(--color-input-bg);
+        }
+        .color-preview {
+            height: 100px;
+            margin-bottom: var(--space-sm);
+            border: 2px solid var(--color-border);
+        }
+        .color-hex {
+            font-weight: bold;
+            margin-bottom: var(--space-xs);
+            cursor: pointer;
+            user-select: all;
+        }
+        .color-hex:hover {
+            color: var(--color-primary);
+        }
+        .scheme-buttons {
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-lg);
+        }
+        .scheme-buttons .btn {
+            flex: 1;
+            min-width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">COLOR PALETTE GENERATOR</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">BASE COLOR</span>
+                </div>
+                <div class="panel-content">
+                    <div class="color-input-section">
+                        <div class="color-picker-wrapper">
+                            <label for="baseColor">SELECT BASE COLOR:</label>
+                            <input type="color" id="baseColor" class="color-picker" value="#6AB0A2">
+                        </div>
+                        <button id="randomBtn" class="btn secondary-btn">RANDOM COLOR</button>
+                    </div>
+                    
+                    <div class="scheme-buttons">
+                        <button class="btn scheme-btn" data-scheme="monochromatic">MONOCHROMATIC</button>
+                        <button class="btn scheme-btn" data-scheme="analogous">ANALOGOUS</button>
+                        <button class="btn scheme-btn" data-scheme="complementary">COMPLEMENTARY</button>
+                        <button class="btn scheme-btn" data-scheme="triadic">TRIADIC</button>
+                        <button class="btn scheme-btn" data-scheme="tetradic">TETRADIC</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">GENERATED PALETTE</span>
+                </div>
+                <div class="panel-content">
+                    <div id="paletteGrid" class="palette-grid"></div>
+                    <div class="action-buttons">
+                        <button id="exportBtn" class="btn primary-btn">EXPORT PALETTE</button>
+                        <button id="copyAllBtn" class="btn secondary-btn">COPY ALL HEX</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>COLOR PALETTE GENERATOR v1.0</p>
+            <p class="footer-note">Generate harmonious color schemes for your designs</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
