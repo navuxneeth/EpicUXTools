@@ -268,10 +268,49 @@
 
         window.removeColor = function(index) {
             colorStops.splice(index, 1);
-            document.getElementById('additionalColors').innerHTML = '';
+            
+            // Re-render all color stops
+            const container = document.getElementById('additionalColors');
+            container.innerHTML = '';
+            
             colorStops.forEach((stop, i) => {
-                // Re-render remaining colors
+                const div = document.createElement('div');
+                div.className = 'control-group';
+                div.innerHTML = `
+                    <label>COLOR ${i + 3}:</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" class="color-picker" value="${stop.color}" data-index="${i}">
+                        <input type="text" value="${stop.color}" data-index="${i}">
+                        <button class="pixel-button-secondary" style="padding: 4px 8px;" onclick="removeColor(${i})">X</button>
+                    </div>
+                    <label>Position: <span id="posValue${i}">${stop.position}</span>%</label>
+                    <input type="range" min="0" max="100" value="${stop.position}" data-index="${i}">
+                `;
+                container.appendChild(div);
+
+                const picker = div.querySelector('input[type="color"]');
+                const text = div.querySelector('input[type="text"]');
+                const slider = div.querySelector('input[type="range"]');
+
+                picker.addEventListener('input', () => {
+                    text.value = picker.value;
+                    colorStops[i].color = picker.value;
+                    updateGradient();
+                });
+
+                text.addEventListener('input', () => {
+                    picker.value = text.value;
+                    colorStops[i].color = text.value;
+                    updateGradient();
+                });
+
+                slider.addEventListener('input', () => {
+                    document.getElementById(`posValue${i}`).textContent = slider.value;
+                    colorStops[i].position = slider.value;
+                    updateGradient();
+                });
             });
+            
             updateGradient();
         };
 

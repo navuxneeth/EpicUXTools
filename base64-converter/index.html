@@ -253,7 +253,7 @@
 
         function encodeText() {
             const input = document.getElementById('textInput').value;
-            const encoded = btoa(unescape(encodeURIComponent(input)));
+            const encoded = btoa(encodeURIComponent(input).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
             document.getElementById('textOutput').value = encoded;
             
             document.getElementById('encodeStats').innerHTML = `
@@ -275,7 +275,7 @@
         function decodeText() {
             try {
                 const input = document.getElementById('base64Input').value.trim();
-                const decoded = decodeURIComponent(escape(atob(input)));
+                const decoded = decodeURIComponent(Array.prototype.map.call(atob(input), c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
                 document.getElementById('decodedOutput').value = decoded;
             } catch (e) {
                 alert('Invalid base64 input');
