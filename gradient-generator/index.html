@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRADIENT GENERATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            padding: var(--space-md);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+        }
+        .control-group label {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        .color-picker-wrapper {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: center;
+        }
+        .color-picker {
+            width: 50px;
+            height: 50px;
+            border: 2px dashed var(--color-border);
+            cursor: pointer;
+        }
+        .gradient-preview {
+            width: 100%;
+            height: 300px;
+            border: 3px dashed var(--color-border);
+            margin: var(--space-lg) 0;
+            position: relative;
+        }
+        .code-output {
+            background: var(--color-input-bg);
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: var(--space-md);
+        }
+        .button-row {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+        select, input[type="number"], input[type="text"] {
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: white;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">[GRADIENT GENERATOR]</h1>
+            <p class="subtitle">CREATE CSS GRADIENTS WITH LIVE PREVIEW</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ GRADIENT SETTINGS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label>GRADIENT TYPE:</label>
+                            <select id="gradientType">
+                                <option value="linear">Linear</option>
+                                <option value="radial">Radial</option>
+                                <option value="conic">Conic</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>DIRECTION/ANGLE:</label>
+                            <select id="direction">
+                                <option value="to right">To Right</option>
+                                <option value="to left">To Left</option>
+                                <option value="to bottom">To Bottom</option>
+                                <option value="to top">To Top</option>
+                                <option value="to bottom right">To Bottom Right</option>
+                                <option value="to bottom left">To Bottom Left</option>
+                                <option value="45deg">45 Degrees</option>
+                                <option value="90deg">90 Degrees</option>
+                                <option value="135deg">135 Degrees</option>
+                                <option value="180deg">180 Degrees</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>COLOR 1:</label>
+                            <div class="color-picker-wrapper">
+                                <input type="color" id="color1" class="color-picker" value="#6AB0A2">
+                                <input type="text" id="color1Hex" value="#6AB0A2">
+                            </div>
+                            <label>Position: <span id="pos1Value">0</span>%</label>
+                            <input type="range" id="pos1" min="0" max="100" value="0">
+                        </div>
+
+                        <div class="control-group">
+                            <label>COLOR 2:</label>
+                            <div class="color-picker-wrapper">
+                                <input type="color" id="color2" class="color-picker" value="#4aa9d5">
+                                <input type="text" id="color2Hex" value="#4aa9d5">
+                            </div>
+                            <label>Position: <span id="pos2Value">100</span>%</label>
+                            <input type="range" id="pos2" min="0" max="100" value="100">
+                        </div>
+                    </div>
+
+                    <button class="pixel-button" id="addColorBtn">ADD COLOR STOP</button>
+                    <div id="additionalColors"></div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ PREVIEW ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="gradient-preview" id="preview"></div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ CSS CODE ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="button-row">
+                        <button class="pixel-button" id="copyBtn">COPY CSS</button>
+                        <button class="pixel-button pixel-button-secondary" id="randomBtn">RANDOM GRADIENT</button>
+                    </div>
+                    <div class="code-output" id="cssOutput"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ <a href="../index.html" style="color: inherit;">[BACK TO HOME]</a> ▼</p>
+        </footer>
+    </div>
+
+    <script>
+        let colorStops = [];
+
+        function updateGradient() {
+            const type = document.getElementById('gradientType').value;
+            const direction = document.getElementById('direction').value;
+            const color1 = document.getElementById('color1').value;
+            const color2 = document.getElementById('color2').value;
+            const pos1 = document.getElementById('pos1').value;
+            const pos2 = document.getElementById('pos2').value;
+
+            let stops = [`${color1} ${pos1}%`, `${color2} ${pos2}%`];
+            stops = stops.concat(colorStops.map(stop => `${stop.color} ${stop.position}%`));
+            stops.sort((a, b) => {
+                const posA = parseInt(a.split(' ')[1]);
+                const posB = parseInt(b.split(' ')[1]);
+                return posA - posB;
+            });
+
+            let gradient;
+            if (type === 'linear') {
+                gradient = `linear-gradient(${direction}, ${stops.join(', ')})`;
+            } else if (type === 'radial') {
+                gradient = `radial-gradient(circle, ${stops.join(', ')})`;
+            } else {
+                gradient = `conic-gradient(${stops.join(', ')})`;
+            }
+
+            document.getElementById('preview').style.background = gradient;
+            document.getElementById('cssOutput').textContent = `background: ${gradient};`;
+        }
+
+        function syncColorInputs(pickerId, hexId) {
+            const picker = document.getElementById(pickerId);
+            const hex = document.getElementById(hexId);
+            
+            picker.addEventListener('input', () => {
+                hex.value = picker.value;
+                updateGradient();
+            });
+            
+            hex.addEventListener('input', () => {
+                picker.value = hex.value;
+                updateGradient();
+            });
+        }
+
+        document.getElementById('gradientType').addEventListener('change', updateGradient);
+        document.getElementById('direction').addEventListener('change', updateGradient);
+        
+        syncColorInputs('color1', 'color1Hex');
+        syncColorInputs('color2', 'color2Hex');
+
+        document.getElementById('pos1').addEventListener('input', (e) => {
+            document.getElementById('pos1Value').textContent = e.target.value;
+            updateGradient();
+        });
+
+        document.getElementById('pos2').addEventListener('input', (e) => {
+            document.getElementById('pos2Value').textContent = e.target.value;
+            updateGradient();
+        });
+
+        document.getElementById('addColorBtn').addEventListener('click', () => {
+            const index = colorStops.length;
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            colorStops.push({ color: randomColor, position: 50 });
+
+            const div = document.createElement('div');
+            div.className = 'control-group';
+            div.innerHTML = `
+                <label>COLOR ${index + 3}:</label>
+                <div class="color-picker-wrapper">
+                    <input type="color" class="color-picker" value="${randomColor}" data-index="${index}">
+                    <input type="text" value="${randomColor}" data-index="${index}">
+                    <button class="pixel-button-secondary" style="padding: 4px 8px;" onclick="removeColor(${index})">X</button>
+                </div>
+                <label>Position: <span id="posValue${index}">50</span>%</label>
+                <input type="range" min="0" max="100" value="50" data-index="${index}">
+            `;
+            document.getElementById('additionalColors').appendChild(div);
+
+            const picker = div.querySelector('input[type="color"]');
+            const text = div.querySelector('input[type="text"]');
+            const slider = div.querySelector('input[type="range"]');
+
+            picker.addEventListener('input', () => {
+                text.value = picker.value;
+                colorStops[index].color = picker.value;
+                updateGradient();
+            });
+
+            text.addEventListener('input', () => {
+                picker.value = text.value;
+                colorStops[index].color = text.value;
+                updateGradient();
+            });
+
+            slider.addEventListener('input', () => {
+                document.getElementById(`posValue${index}`).textContent = slider.value;
+                colorStops[index].position = slider.value;
+                updateGradient();
+            });
+
+            updateGradient();
+        });
+
+        window.removeColor = function(index) {
+            colorStops.splice(index, 1);
+            
+            // Re-render all color stops
+            const container = document.getElementById('additionalColors');
+            container.innerHTML = '';
+            
+            colorStops.forEach((stop, i) => {
+                const div = document.createElement('div');
+                div.className = 'control-group';
+                div.innerHTML = `
+                    <label>COLOR ${i + 3}:</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" class="color-picker" value="${stop.color}" data-index="${i}">
+                        <input type="text" value="${stop.color}" data-index="${i}">
+                        <button class="pixel-button-secondary" style="padding: 4px 8px;" onclick="removeColor(${i})">X</button>
+                    </div>
+                    <label>Position: <span id="posValue${i}">${stop.position}</span>%</label>
+                    <input type="range" min="0" max="100" value="${stop.position}" data-index="${i}">
+                `;
+                container.appendChild(div);
+
+                const picker = div.querySelector('input[type="color"]');
+                const text = div.querySelector('input[type="text"]');
+                const slider = div.querySelector('input[type="range"]');
+
+                picker.addEventListener('input', () => {
+                    text.value = picker.value;
+                    colorStops[i].color = picker.value;
+                    updateGradient();
+                });
+
+                text.addEventListener('input', () => {
+                    picker.value = text.value;
+                    colorStops[i].color = text.value;
+                    updateGradient();
+                });
+
+                slider.addEventListener('input', () => {
+                    document.getElementById(`posValue${i}`).textContent = slider.value;
+                    colorStops[i].position = slider.value;
+                    updateGradient();
+                });
+            });
+            
+            updateGradient();
+        };
+
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const code = document.getElementById('cssOutput').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('CSS copied to clipboard!');
+            });
+        });
+
+        document.getElementById('randomBtn').addEventListener('click', () => {
+            document.getElementById('color1').value = '#' + Math.floor(Math.random()*16777215).toString(16);
+            document.getElementById('color1Hex').value = document.getElementById('color1').value;
+            document.getElementById('color2').value = '#' + Math.floor(Math.random()*16777215).toString(16);
+            document.getElementById('color2Hex').value = document.getElementById('color2').value;
+            updateGradient();
+        });
+
+        // Initial render
+        updateGradient();
+    </script>
+</body>
+</html>

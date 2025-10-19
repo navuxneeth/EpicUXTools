@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOREM IPSUM GENERATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            padding: var(--space-md);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+        }
+        .control-group label {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        .output-area {
+            background: var(--color-input-bg);
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            font-size: 1rem;
+            line-height: 1.6;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        select, input[type="number"] {
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: white;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+        }
+        .button-row {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-md);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+        .stat-box {
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            text-align: center;
+            background: var(--color-input-bg);
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--color-text-dim);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">[LOREM IPSUM GENERATOR]</h1>
+            <p class="subtitle">GENERATE PLACEHOLDER TEXT FOR DESIGNS</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ SETTINGS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label>GENERATE:</label>
+                            <select id="generateType">
+                                <option value="paragraphs">Paragraphs</option>
+                                <option value="sentences">Sentences</option>
+                                <option value="words">Words</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>AMOUNT:</label>
+                            <input type="number" id="amount" min="1" max="100" value="5">
+                        </div>
+
+                        <div class="control-group">
+                            <label>START WITH:</label>
+                            <select id="startWith">
+                                <option value="lorem">Lorem ipsum dolor sit amet...</option>
+                                <option value="random">Random start</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>CASE:</label>
+                            <select id="textCase">
+                                <option value="normal">Normal Case</option>
+                                <option value="upper">UPPERCASE</option>
+                                <option value="lower">lowercase</option>
+                                <option value="title">Title Case</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="button-row">
+                        <button class="pixel-button" id="generateBtn">GENERATE TEXT</button>
+                        <button class="pixel-button-secondary" id="copyBtn">COPY TO CLIPBOARD</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ OUTPUT ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="output-area" id="output"></div>
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-value" id="charCount">0</div>
+                            <div class="stat-label">CHARACTERS</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="wordCount">0</div>
+                            <div class="stat-label">WORDS</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="sentenceCount">0</div>
+                            <div class="stat-label">SENTENCES</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="paragraphCount">0</div>
+                            <div class="stat-label">PARAGRAPHS</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ <a href="../index.html" style="color: inherit;">[BACK TO HOME]</a> ▼</p>
+        </footer>
+    </div>
+
+    <script>
+        const loremWords = [
+            'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit',
+            'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore',
+            'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud',
+            'exercitation', 'ullamco', 'laboris', 'nisi', 'aliquip', 'ex', 'ea', 'commodo',
+            'consequat', 'duis', 'aute', 'irure', 'in', 'reprehenderit', 'voluptate',
+            'velit', 'esse', 'cillum', 'fugiat', 'nulla', 'pariatur', 'excepteur', 'sint',
+            'occaecat', 'cupidatat', 'non', 'proident', 'sunt', 'culpa', 'qui', 'officia',
+            'deserunt', 'mollit', 'anim', 'id', 'est', 'laborum'
+        ];
+
+        const loremStart = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function capitalize(word) {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+        }
+
+        function generateWords(count) {
+            const words = [];
+            for (let i = 0; i < count; i++) {
+                words.push(loremWords[randomInt(0, loremWords.length - 1)]);
+            }
+            return words;
+        }
+
+        function generateSentence(minWords = 5, maxWords = 15) {
+            const wordCount = randomInt(minWords, maxWords);
+            const words = generateWords(wordCount);
+            words[0] = capitalize(words[0]);
+            return words.join(' ') + '.';
+        }
+
+        function generateParagraph(minSentences = 3, maxSentences = 7) {
+            const sentenceCount = randomInt(minSentences, maxSentences);
+            const sentences = [];
+            for (let i = 0; i < sentenceCount; i++) {
+                sentences.push(generateSentence());
+            }
+            return sentences.join(' ');
+        }
+
+        function applyCase(text, caseType) {
+            switch(caseType) {
+                case 'upper':
+                    return text.toUpperCase();
+                case 'lower':
+                    return text.toLowerCase();
+                case 'title':
+                    return text.split(' ').map(word => capitalize(word)).join(' ');
+                default:
+                    return text;
+            }
+        }
+
+        function generateText() {
+            const type = document.getElementById('generateType').value;
+            const amount = parseInt(document.getElementById('amount').value);
+            const startWith = document.getElementById('startWith').value;
+            const textCase = document.getElementById('textCase').value;
+
+            let text = '';
+
+            if (type === 'paragraphs') {
+                const paragraphs = [];
+                for (let i = 0; i < amount; i++) {
+                    if (i === 0 && startWith === 'lorem') {
+                        paragraphs.push(loremStart + '. ' + generateParagraph().slice(generateSentence().length + 1));
+                    } else {
+                        paragraphs.push(generateParagraph());
+                    }
+                }
+                text = paragraphs.join('\n\n');
+            } else if (type === 'sentences') {
+                const sentences = [];
+                for (let i = 0; i < amount; i++) {
+                    if (i === 0 && startWith === 'lorem') {
+                        sentences.push(loremStart);
+                    } else {
+                        sentences.push(generateSentence());
+                    }
+                }
+                text = sentences.join(' ');
+            } else {
+                const words = [];
+                if (startWith === 'lorem') {
+                    words.push(...loremStart.replace(/[,\.]/g, '').split(' ').slice(0, Math.min(amount, 10)));
+                    for (let i = words.length; i < amount; i++) {
+                        words.push(loremWords[randomInt(0, loremWords.length - 1)]);
+                    }
+                } else {
+                    for (let i = 0; i < amount; i++) {
+                        words.push(loremWords[randomInt(0, loremWords.length - 1)]);
+                    }
+                }
+                text = words.join(' ');
+            }
+
+            text = applyCase(text, textCase);
+            document.getElementById('output').textContent = text;
+            updateStats(text);
+        }
+
+        function updateStats(text) {
+            const chars = text.length;
+            const words = text.trim().split(/\s+/).length;
+            const sentences = (text.match(/[.!?]+/g) || []).length;
+            const paragraphs = text.split(/\n\n+/).length;
+
+            document.getElementById('charCount').textContent = chars;
+            document.getElementById('wordCount').textContent = words;
+            document.getElementById('sentenceCount').textContent = sentences;
+            document.getElementById('paragraphCount').textContent = paragraphs;
+        }
+
+        document.getElementById('generateBtn').addEventListener('click', generateText);
+
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const text = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Text copied to clipboard!');
+            });
+        });
+
+        // Generate initial text
+        generateText();
+    </script>
+</body>
+</html>

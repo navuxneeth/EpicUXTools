@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAVICON GENERATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        .upload-area {
+            border: 3px dashed var(--color-border);
+            padding: var(--space-xl);
+            text-align: center;
+            background: var(--color-input-bg);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            background: var(--color-bg-alt);
+        }
+        .upload-area.dragover {
+            background: var(--color-primary);
+            color: white;
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+        .preview-item {
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            background: var(--color-input-bg);
+            text-align: center;
+        }
+        .preview-item img {
+            max-width: 100%;
+            image-rendering: pixelated;
+            background: repeating-conic-gradient(#ccc 0% 25%, white 0% 50%) 50% / 20px 20px;
+        }
+        .preview-label {
+            margin-top: var(--space-sm);
+            font-weight: bold;
+            color: var(--color-primary);
+            font-size: 0.9rem;
+        }
+        .preview-size {
+            font-size: 0.8rem;
+            color: var(--color-text-dim);
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .button-row {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-top: var(--space-md);
+        }
+        #originalPreview {
+            max-width: 300px;
+            margin: var(--space-md) auto;
+            display: block;
+            border: 3px dashed var(--color-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">[FAVICON GENERATOR]</h1>
+            <p class="subtitle">CREATE FAVICONS IN MULTIPLE SIZES FROM IMAGE</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ UPLOAD IMAGE ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="upload-area" id="uploadArea">
+                        <div style="font-size: 3rem; margin-bottom: var(--space-md);">[IMG]</div>
+                        <p style="font-size: 1.2rem; font-weight: bold;">CLICK OR DRAG IMAGE HERE</p>
+                        <p style="font-size: 0.9rem; color: var(--color-text-dim);">Supports PNG, JPG, GIF, BMP - Square images work best</p>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*">
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+            </section>
+
+            <section class="pixel-panel" id="previewSection" style="display: none;">
+                <div class="panel-header">
+                    <span class="panel-title">◢ ORIGINAL IMAGE ◣</span>
+                </div>
+                <div class="panel-content">
+                    <img id="originalPreview" alt="Original">
+                </div>
+            </section>
+
+            <section class="pixel-panel" id="faviconSection" style="display: none;">
+                <div class="panel-header">
+                    <span class="panel-title">◢ GENERATED FAVICONS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="preview-grid" id="previewGrid"></div>
+                    
+                    <div class="button-row">
+                        <button class="pixel-button" id="downloadAllBtn">DOWNLOAD ALL (ZIP)</button>
+                        <button class="pixel-button-secondary" id="resetBtn">UPLOAD NEW IMAGE</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ <a href="../index.html" style="color: inherit;">[BACK TO HOME]</a> ▼</p>
+        </footer>
+    </div>
+
+    <script>
+        const sizes = [16, 32, 48, 64, 128, 180, 192, 512];
+        let sourceImage = null;
+        let generatedFavicons = {};
+
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    sourceImage = img;
+                    document.getElementById('originalPreview').src = e.target.result;
+                    document.getElementById('previewSection').style.display = 'block';
+                    generateFavicons();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function generateFavicons() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const previewGrid = document.getElementById('previewGrid');
+            
+            previewGrid.innerHTML = '';
+            generatedFavicons = {};
+
+            sizes.forEach(size => {
+                canvas.width = size;
+                canvas.height = size;
+                
+                // Draw image scaled to size
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(sourceImage, 0, 0, size, size);
+                
+                // Get data URL
+                const dataUrl = canvas.toDataURL('image/png');
+                generatedFavicons[size] = dataUrl;
+                
+                // Create preview
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+                previewItem.innerHTML = `
+                    <img src="${dataUrl}" alt="${size}x${size}" style="width: ${Math.min(size, 128)}px; height: ${Math.min(size, 128)}px;">
+                    <div class="preview-label">${size}x${size}</div>
+                    <div class="preview-size">${size === 16 ? 'Browser' : size === 32 ? 'Taskbar' : size === 180 ? 'iOS' : size === 192 ? 'Android' : 'General'}</div>
+                    <button class="pixel-button-secondary" style="margin-top: var(--space-sm); padding: 4px 8px; font-size: 0.8rem;" onclick="downloadSingle(${size})">DOWNLOAD</button>
+                `;
+                previewGrid.appendChild(previewItem);
+            });
+
+            document.getElementById('faviconSection').style.display = 'block';
+        }
+
+        window.downloadSingle = function(size) {
+            const link = document.createElement('a');
+            link.download = `favicon-${size}x${size}.png`;
+            link.href = generatedFavicons[size];
+            link.click();
+        };
+
+        document.getElementById('downloadAllBtn').addEventListener('click', async () => {
+            const zip = new JSZip();
+            const folder = zip.folder('favicons');
+
+            // Add all favicons to ZIP
+            for (const [size, dataUrl] of Object.entries(generatedFavicons)) {
+                const base64 = dataUrl.split(',')[1];
+                folder.file(`favicon-${size}x${size}.png`, base64, {base64: true});
+            }
+
+            // Generate HTML example
+            const htmlExample = `<!DOCTYPE html>
+<html>
+<head>
+    <!-- Favicon links -->
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+</head>
+<body>
+    <!-- Your content here -->
+</body>
+</html>`;
+            folder.file('example.html', htmlExample);
+
+            // Generate and download ZIP
+            const content = await zip.generateAsync({type: 'blob'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = 'favicons.zip';
+            link.click();
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            sourceImage = null;
+            generatedFavicons = {};
+            fileInput.value = '';
+            document.getElementById('previewSection').style.display = 'none';
+            document.getElementById('faviconSection').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

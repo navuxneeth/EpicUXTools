@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BORDER RADIUS VISUALIZER</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            padding: var(--space-md);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+        }
+        .control-group label {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        .preview-container {
+            background: #f0f0f0;
+            padding: var(--space-xl);
+            border: 3px dashed var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+        .preview-box {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #6AB0A2, #4aa9d5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'VT323', monospace;
+            font-size: 2rem;
+            color: white;
+            border: 5px solid #283238;
+        }
+        .corner-labels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+        .corner-label {
+            text-align: center;
+            padding: var(--space-sm);
+            background: var(--color-input-bg);
+            border: 2px dashed var(--color-border);
+            font-size: 0.9rem;
+        }
+        .code-output {
+            background: var(--color-input-bg);
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: var(--space-md);
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        .preset-buttons {
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-md);
+        }
+        .preset-btn {
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+            font-family: 'VT323', monospace;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .preset-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">[BORDER RADIUS VISUALIZER]</h1>
+            <p class="subtitle">CREATE ROUNDED CORNERS WITH LIVE PREVIEW</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ PRESETS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="preset-buttons">
+                        <button class="preset-btn" onclick="applyPreset(0, 0, 0, 0)">SQUARE</button>
+                        <button class="preset-btn" onclick="applyPreset(10, 10, 10, 10)">SLIGHTLY ROUNDED</button>
+                        <button class="preset-btn" onclick="applyPreset(20, 20, 20, 20)">ROUNDED</button>
+                        <button class="preset-btn" onclick="applyPreset(50, 50, 50, 50)">VERY ROUNDED</button>
+                        <button class="preset-btn" onclick="applyPreset(150, 150, 150, 150)">CIRCLE</button>
+                        <button class="preset-btn" onclick="applyPreset(150, 150, 0, 0)">TOP ROUNDED</button>
+                        <button class="preset-btn" onclick="applyPreset(0, 0, 150, 150)">BOTTOM ROUNDED</button>
+                        <button class="preset-btn" onclick="applyPreset(150, 0, 0, 150)">LEFT ROUNDED</button>
+                        <button class="preset-btn" onclick="applyPreset(0, 150, 150, 0)">RIGHT ROUNDED</button>
+                        <button class="preset-btn" onclick="applyPreset(150, 50, 150, 50)">PILL SHAPE</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ CORNER CONTROLS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <label style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
+                        <input type="checkbox" id="linkCorners" checked>
+                        <span style="font-weight: bold;">LINK ALL CORNERS</span>
+                    </label>
+
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label>TOP-LEFT: <span id="tlValue">20</span>px</label>
+                            <input type="range" id="topLeft" min="0" max="150" value="20">
+                        </div>
+
+                        <div class="control-group">
+                            <label>TOP-RIGHT: <span id="trValue">20</span>px</label>
+                            <input type="range" id="topRight" min="0" max="150" value="20">
+                        </div>
+
+                        <div class="control-group">
+                            <label>BOTTOM-LEFT: <span id="blValue">20</span>px</label>
+                            <input type="range" id="bottomLeft" min="0" max="150" value="20">
+                        </div>
+
+                        <div class="control-group">
+                            <label>BOTTOM-RIGHT: <span id="brValue">20</span>px</label>
+                            <input type="range" id="bottomRight" min="0" max="150" value="20">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ PREVIEW ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="preview-container">
+                        <div class="preview-box" id="previewBox">
+                            ROUNDED<br>CORNERS
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ CSS CODE ◣</span>
+                </div>
+                <div class="panel-content">
+                    <button class="pixel-button" id="copyBtn">COPY CSS</button>
+                    <div class="code-output" id="cssOutput"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ <a href="../index.html" style="color: inherit;">[BACK TO HOME]</a> ▼</p>
+        </footer>
+    </div>
+
+    <script>
+        function updateBorderRadius() {
+            const tl = document.getElementById('topLeft').value;
+            const tr = document.getElementById('topRight').value;
+            const bl = document.getElementById('bottomLeft').value;
+            const br = document.getElementById('bottomRight').value;
+
+            const borderRadius = `${tl}px ${tr}px ${br}px ${bl}px`;
+            document.getElementById('previewBox').style.borderRadius = borderRadius;
+            
+            if (tl === tr && tr === bl && bl === br) {
+                document.getElementById('cssOutput').textContent = `border-radius: ${tl}px;`;
+            } else {
+                document.getElementById('cssOutput').textContent = `border-radius: ${borderRadius};`;
+            }
+        }
+
+        function setupSlider(id, valueId) {
+            const slider = document.getElementById(id);
+            const valueSpan = document.getElementById(valueId);
+            
+            slider.addEventListener('input', (e) => {
+                valueSpan.textContent = e.target.value;
+                
+                if (document.getElementById('linkCorners').checked) {
+                    document.getElementById('topLeft').value = e.target.value;
+                    document.getElementById('topRight').value = e.target.value;
+                    document.getElementById('bottomLeft').value = e.target.value;
+                    document.getElementById('bottomRight').value = e.target.value;
+                    document.getElementById('tlValue').textContent = e.target.value;
+                    document.getElementById('trValue').textContent = e.target.value;
+                    document.getElementById('blValue').textContent = e.target.value;
+                    document.getElementById('brValue').textContent = e.target.value;
+                }
+                
+                updateBorderRadius();
+            });
+        }
+
+        setupSlider('topLeft', 'tlValue');
+        setupSlider('topRight', 'trValue');
+        setupSlider('bottomLeft', 'blValue');
+        setupSlider('bottomRight', 'brValue');
+
+        window.applyPreset = function(tl, tr, bl, br) {
+            document.getElementById('topLeft').value = tl;
+            document.getElementById('topRight').value = tr;
+            document.getElementById('bottomLeft').value = bl;
+            document.getElementById('bottomRight').value = br;
+            document.getElementById('tlValue').textContent = tl;
+            document.getElementById('trValue').textContent = tr;
+            document.getElementById('blValue').textContent = bl;
+            document.getElementById('brValue').textContent = br;
+            updateBorderRadius();
+        };
+
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const code = document.getElementById('cssOutput').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('CSS copied to clipboard!');
+            });
+        });
+
+        // Initial render
+        updateBorderRadius();
+    </script>
+</body>
+</html>

@@ -146,6 +146,102 @@ Edit audio files with comprehensive tools and waveform visualization.
   - Real-time preview of all edits
 - **Location:** `/audio-tools/index.html`
 
+### 14. Gradient Generator
+Create beautiful CSS gradients with live preview.
+- **Features:**
+  - Linear, radial, and conic gradient types
+  - Multiple direction/angle options
+  - Add unlimited color stops
+  - Adjustable color positions
+  - Random gradient generation
+  - Copy CSS code with one click
+  - Real-time preview
+- **Location:** `/gradient-generator/index.html`
+
+### 15. Shadow Generator
+Generate CSS box and text shadows with live preview.
+- **Features:**
+  - Box shadow and text shadow modes
+  - Adjustable horizontal and vertical offset
+  - Blur radius control
+  - Spread control (box shadow only)
+  - Color picker with opacity
+  - Inset shadow option
+  - Copy CSS code instantly
+- **Location:** `/shadow-generator/index.html`
+
+### 16. Border Radius Visualizer
+Create rounded corners with visual feedback.
+- **Features:**
+  - Independent corner control
+  - Link/unlink corners option
+  - Multiple preset shapes (circle, pill, rounded box, etc.)
+  - Adjustable radius from 0-150px
+  - Live preview with gradient background
+  - CSS code generation
+- **Location:** `/border-radius-visualizer/index.html`
+
+### 17. Lorem Ipsum Generator
+Generate placeholder text for design mockups.
+- **Features:**
+  - Generate paragraphs, sentences, or words
+  - Customizable amount (1-100)
+  - Start with classic "Lorem ipsum..." or random
+  - Multiple case options (normal, uppercase, lowercase, title case)
+  - Real-time statistics (characters, words, sentences, paragraphs)
+  - Copy to clipboard
+- **Location:** `/lorem-ipsum-generator/index.html`
+
+### 18. QR Code Generator
+Create QR codes for URLs, text, and more.
+- **Features:**
+  - Support for URLs, email, phone, SMS, WiFi, and plain text
+  - Quick presets for common formats
+  - Adjustable size (128px to 512px)
+  - Error correction levels (Low, Medium, Quartile, High)
+  - Custom foreground and background colors
+  - Download as PNG
+  - Copy content templates
+- **Location:** `/qr-code-generator/index.html`
+
+### 19. Favicon Generator
+Generate favicons in multiple sizes from a single image.
+- **Features:**
+  - Generate 8 standard sizes (16x16 to 512x512)
+  - Drag and drop interface
+  - Preview all generated sizes
+  - Download individual sizes
+  - Download all as ZIP with example HTML
+  - Includes iOS (180x180) and Android (192x192) icons
+  - Transparent background support
+- **Location:** `/favicon-generator/index.html`
+
+### 20. Base64 Converter
+Encode and decode text and files to/from base64.
+- **Features:**
+  - Text encoding and decoding
+  - File to base64 conversion
+  - Image preview from base64
+  - Data URL support
+  - Size statistics
+  - Copy to clipboard
+  - Download encoded data
+  - Multiple tabs for different operations
+- **Location:** `/base64-converter/index.html`
+
+### 21. SVG Icon Generator
+Create customizable SVG icons for web projects.
+- **Features:**
+  - 18 common icon shapes (plus, check, heart, star, home, etc.)
+  - Adjustable size (16px to 512px)
+  - Stroke width control
+  - Custom colors
+  - Outline or filled styles
+  - Copy SVG code
+  - Download as SVG or PNG
+  - Live preview
+- **Location:** `/svg-icon-generator/index.html`
+
 ## Design Theme
 
 Tools feature a **retro pixel aesthetic** with VT323 monospace font and two available color themes:

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR CODE GENERATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <style>
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            padding: var(--space-md);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+        }
+        .control-group label {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        .qr-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            padding: var(--space-xl);
+            background: white;
+            border: 3px dashed var(--color-border);
+        }
+        #qrcode {
+            display: inline-block;
+        }
+        #qrcode img, #qrcode canvas {
+            border: 3px dashed var(--color-border);
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: white;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            resize: vertical;
+        }
+        select, input[type="number"], input[type="color"] {
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: white;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+        }
+        input[type="color"] {
+            height: 50px;
+            cursor: pointer;
+        }
+        .button-row {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+        .preset-buttons {
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-md);
+        }
+        .preset-btn {
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+            font-family: 'VT323', monospace;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .preset-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">[QR CODE GENERATOR]</h1>
+            <p class="subtitle">CREATE QR CODES FOR URLs, TEXT, AND MORE</p>
+        </header>
+
+        <main class="main-content">
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ QR CODE DATA ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="preset-buttons">
+                        <button class="preset-btn" onclick="setPreset('url')">URL</button>
+                        <button class="preset-btn" onclick="setPreset('email')">EMAIL</button>
+                        <button class="preset-btn" onclick="setPreset('phone')">PHONE</button>
+                        <button class="preset-btn" onclick="setPreset('sms')">SMS</button>
+                        <button class="preset-btn" onclick="setPreset('wifi')">WIFI</button>
+                        <button class="preset-btn" onclick="setPreset('text')">PLAIN TEXT</button>
+                    </div>
+
+                    <div class="control-group">
+                        <label>CONTENT:</label>
+                        <textarea id="qrContent" placeholder="Enter URL, text, or data to encode...">https://github.com/navuxneeth/EpicUXTools</textarea>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ SETTINGS ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label>SIZE:</label>
+                            <select id="qrSize">
+                                <option value="128">Small (128x128)</option>
+                                <option value="256" selected>Medium (256x256)</option>
+                                <option value="384">Large (384x384)</option>
+                                <option value="512">Extra Large (512x512)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>ERROR CORRECTION:</label>
+                            <select id="errorCorrection">
+                                <option value="L">Low (7%)</option>
+                                <option value="M" selected>Medium (15%)</option>
+                                <option value="Q">Quartile (25%)</option>
+                                <option value="H">High (30%)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>FOREGROUND COLOR:</label>
+                            <input type="color" id="colorDark" value="#000000">
+                        </div>
+
+                        <div class="control-group">
+                            <label>BACKGROUND COLOR:</label>
+                            <input type="color" id="colorLight" value="#ffffff">
+                        </div>
+                    </div>
+
+                    <div class="button-row">
+                        <button class="pixel-button" id="generateBtn">GENERATE QR CODE</button>
+                        <button class="pixel-button-secondary" id="downloadBtn">DOWNLOAD PNG</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ QR CODE PREVIEW ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="qr-container">
+                        <div id="qrcode"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ <a href="../index.html" style="color: inherit;">[BACK TO HOME]</a> ▼</p>
+        </footer>
+    </div>
+
+    <script>
+        let qrcode = null;
+
+        function generateQRCode() {
+            const content = document.getElementById('qrContent').value.trim();
+            if (!content) {
+                alert('Please enter content to generate QR code');
+                return;
+            }
+
+            const size = parseInt(document.getElementById('qrSize').value);
+            const errorLevel = document.getElementById('errorCorrection').value;
+            const colorDark = document.getElementById('colorDark').value;
+            const colorLight = document.getElementById('colorLight').value;
+
+            // Clear previous QR code
+            document.getElementById('qrcode').innerHTML = '';
+
+            // Generate new QR code
+            qrcode = new QRCode(document.getElementById('qrcode'), {
+                text: content,
+                width: size,
+                height: size,
+                colorDark: colorDark,
+                colorLight: colorLight,
+                correctLevel: QRCode.CorrectLevel[errorLevel]
+            });
+        }
+
+        function downloadQRCode() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) {
+                alert('Please generate a QR code first');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.download = 'qr-code.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        window.setPreset = function(type) {
+            const textarea = document.getElementById('qrContent');
+            switch(type) {
+                case 'url':
+                    textarea.value = 'https://';
+                    textarea.placeholder = 'Enter URL (e.g., https://example.com)';
+                    break;
+                case 'email':
+                    textarea.value = 'mailto:';
+                    textarea.placeholder = 'Enter email (e.g., mailto:user@example.com)';
+                    break;
+                case 'phone':
+                    textarea.value = 'tel:';
+                    textarea.placeholder = 'Enter phone (e.g., tel:+1234567890)';
+                    break;
+                case 'sms':
+                    textarea.value = 'sms:';
+                    textarea.placeholder = 'Enter SMS (e.g., sms:+1234567890?body=Hello)';
+                    break;
+                case 'wifi':
+                    textarea.value = 'WIFI:T:WPA;S:NetworkName;P:Password;;';
+                    textarea.placeholder = 'WIFI:T:WPA;S:NetworkName;P:Password;;';
+                    break;
+                case 'text':
+                    textarea.value = '';
+                    textarea.placeholder = 'Enter any text...';
+                    break;
+            }
+            textarea.focus();
+        };
+
+        document.getElementById('generateBtn').addEventListener('click', generateQRCode);
+        document.getElementById('downloadBtn').addEventListener('click', downloadQRCode);
+        document.getElementById('qrContent').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                generateQRCode();
+            }
+        });
+
+        // Generate initial QR code
+        generateQRCode();
+    </script>
+</body>
+</html>
