@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>◆ FONT WEIGHT GENERATOR ◆</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <style>
+        .preview-area {
+            background: var(--color-input-bg);
+            border: 3px dashed var(--color-border);
+            padding: var(--space-xl);
+            margin-top: var(--space-lg);
+            min-height: 300px;
+        }
+        
+        .preview-text {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: var(--space-lg);
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        
+        .preview-alphabet {
+            font-size: 24px;
+            text-align: center;
+            line-height: 1.6;
+            word-break: break-all;
+        }
+        
+        .controls-grid {
+            display: grid;
+            gap: var(--space-lg);
+            margin-top: var(--space-lg);
+        }
+        
+        .control-group {
+            display: grid;
+            gap: var(--space-sm);
+        }
+        
+        .control-label {
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .slider-container {
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
+        }
+        
+        .slider-value {
+            min-width: 80px;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+        
+        .number-input-container {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: center;
+        }
+        
+        .number-input {
+            width: 100px;
+        }
+        
+        .info-box {
+            background: var(--color-bg-alt);
+            border: 2px dashed var(--color-border);
+            padding: var(--space-md);
+            margin-top: var(--space-md);
+            font-size: 0.9rem;
+        }
+        
+        .font-info {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+        
+        .font-info-label {
+            color: var(--color-text-dim);
+        }
+        
+        .font-info-value {
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ FONT WEIGHT GENERATOR ◆</h1>
+            <p class="subtitle">RETRO PIXEL EDITION</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ UPLOAD FONT FILE ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📝</div>
+                        <h3>DROP FONT FILE HERE</h3>
+                        <p>or click to select</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Supports: TTF, OTF, WOFF, WOFF2</p>
+                        <input type="file" id="fileInput" accept=".ttf,.otf,.woff,.woff2" hidden>
+                    </div>
+                    
+                    <div id="statusMessage"></div>
+                    
+                    <div id="fontInfo" class="info-box hidden">
+                        <div class="font-info">
+                            <div class="font-info-label">Font Name:</div>
+                            <div class="font-info-value" id="fontName">-</div>
+                            <div class="font-info-label">Font Family:</div>
+                            <div class="font-info-value" id="fontFamily">-</div>
+                            <div class="font-info-label">Original Weight:</div>
+                            <div class="font-info-value" id="originalWeight">Regular</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="pixel-panel hidden" id="previewPanel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ LIVE PREVIEW ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="preview-area">
+                        <div class="preview-text" id="previewText" contenteditable="true">
+                            The quick brown fox jumps over the lazy dog
+                        </div>
+                        <div class="preview-alphabet" id="previewAlphabet">
+                            ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
+                            abcdefghijklmnopqrstuvwxyz<br>
+                            0123456789 !@#$%^&*()
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls Section -->
+            <section class="pixel-panel hidden" id="controlsPanel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ ADJUST STROKE WIDTH ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label class="control-label">STROKE WIDTH ADJUSTMENT:</label>
+                            <div class="slider-container">
+                                <span style="min-width: 40px;">-100</span>
+                                <input type="range" id="strokeSlider" min="-100" max="100" value="0" step="1" class="input-field" style="flex: 1;">
+                                <span style="min-width: 40px;">+100</span>
+                                <span class="slider-value" id="sliderValue">0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label class="control-label">PRECISE VALUE (Integer):</label>
+                            <div class="number-input-container">
+                                <input type="number" id="strokeInput" min="-100" max="100" value="0" step="1" class="input-field number-input">
+                                <button id="applyStroke" class="btn primary-btn">
+                                    <span class="btn-icon">►</span> APPLY
+                                </button>
+                                <button id="resetStroke" class="btn secondary-btn">
+                                    <span class="btn-icon">↻</span> RESET
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">PREVIEW TEXT SIZE:</label>
+                            <div class="slider-container">
+                                <span style="min-width: 40px;">12px</span>
+                                <input type="range" id="sizeSlider" min="12" max="96" value="48" step="4" class="input-field" style="flex: 1;">
+                                <span style="min-width: 40px;">96px</span>
+                                <span class="slider-value" id="sizeValue">48px</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: var(--space-lg);">
+                        <strong>NOTE:</strong> Positive values increase stroke width (bolder), negative values decrease stroke width (lighter). 
+                        Values range from -100 to +100 for fine-tuned control.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Download Section -->
+            <section class="pixel-panel hidden" id="downloadPanel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ DOWNLOAD MODIFIED FONT ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div style="display: grid; gap: var(--space-md);">
+                        <div>
+                            <label class="control-label">OUTPUT FORMAT:</label>
+                            <select id="outputFormat" class="input-field" style="width: auto; min-width: 200px;">
+                                <option value="ttf">TrueType Font (.ttf)</option>
+                                <option value="otf">OpenType Font (.otf)</option>
+                                <option value="woff">Web Open Font Format (.woff)</option>
+                                <option value="woff2">Web Open Font Format 2 (.woff2)</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="control-label">CUSTOM FONT NAME:</label>
+                            <input type="text" id="customFontName" placeholder="e.g., MyFont-Bold" class="input-field" style="max-width: 400px;">
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button id="downloadBtn" class="btn success-btn">
+                                <span class="btn-icon">⬇</span> DOWNLOAD FONT
+                            </button>
+                            <button id="clearBtn" class="btn secondary-btn">
+                                <span class="btn-icon">✕</span> CLEAR & START OVER
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ FONT WEIGHT GENERATOR v1.0 ▼</p>
+            <p class="footer-note">Upload fonts and generate different line weights - live preview included</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
