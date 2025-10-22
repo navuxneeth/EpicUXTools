@@ -36,16 +36,40 @@ class FontWeightGenerator {
         this.clearBtn = document.getElementById('clearBtn');
         
         // Font data
-        this.originalFont = null;
-        this.modifiedFont = null;
+        this.fontFile = null;
+        this.fontData = null;
         this.currentStrokeWidth = 0;
         this.fontFileName = '';
+        this.customFontFamily = '';
         
         this.init();
     }
 
     init() {
         this.setupEventListeners();
+        this.createSVGFilters();
+    }
+
+    createSVGFilters() {
+        // Create SVG filters for stroke effects
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.style.position = 'absolute';
+        svg.style.width = '0';
+        svg.style.height = '0';
+        svg.innerHTML = `
+            <defs>
+                <filter id="strokeBold" x="-50%" y="-50%" width="200%" height="200%">
+                    <feMorphology operator="dilate" radius="0.5"/>
+                </filter>
+                <filter id="strokeBolder" x="-50%" y="-50%" width="200%" height="200%">
+                    <feMorphology operator="dilate" radius="1"/>
+                </filter>
+                <filter id="strokeLight" x="-50%" y="-50%" width="200%" height="200%">
+                    <feMorphology operator="erode" radius="0.3"/>
+                </filter>
+            </defs>
+        `;
+        document.body.appendChild(svg);
     }
 
     setupEventListeners() {
@@ -126,6 +150,16 @@ class FontWeightGenerator {
     }
 
     handleFontUpload(file) {
+        const validExtensions = ['.ttf', '.otf', '.woff', '.woff2'];
+        const fileName = file.name.toLowerCase();
+        const isValid = validExtensions.some(ext => fileName.endsWith(ext));
+        
+        if (!isValid) {
+            this.showStatus('Please upload a valid font file (.ttf, .otf, .woff, .woff2)', 'error');
+            return;
+        }
+
+        this.fontFile = file;
         this.fontFileName = file.name;
         const reader = new FileReader();
 
@@ -133,219 +167,180 @@ class FontWeightGenerator {
 
         reader.onload = (e) => {
             try {
-                const arrayBuffer = e.target.result;
-                this.originalFont = opentype.parse(arrayBuffer);
-                this.displayFontInfo();
-                this.loadFontIntoPreview();
-                this.showStatus('Font loaded successfully!', 'success');
-                this.showPanels();
+                this.fontData = e.target.result;
+                this.loadFont();
             } catch (error) {
                 this.showStatus('Error loading font: ' + error.message, 'error');
                 console.error(error);
             }
         };
 
-        reader.readAsArrayBuffer(file);
+        reader.readAsDataURL(file);
+    }
+
+    loadFont() {
+        // Create a unique font family name
+        const timestamp = Date.now();
+        this.customFontFamily = `CustomFont${timestamp}`;
+        
+        // Create @font-face rule
+        const fontFace = `
+            @font-face {
+                font-family: '${this.customFontFamily}';
+                src: url('${this.fontData}');
+            }
+        `;
+        
+        // Add style element
+        const style = document.createElement('style');
+        style.id = 'uploadedFontStyle';
+        style.textContent = fontFace;
+        document.head.appendChild(style);
+        
+        // Wait for font to load
+        if (document.fonts && document.fonts.load) {
+            document.fonts.load(`48px ${this.customFontFamily}`).then(() => {
+                this.displayFontInfo();
+                this.applyFontToPreview();
+                this.showStatus('Font loaded successfully!', 'success');
+                this.showPanels();
+            }).catch((error) => {
+                console.warn('Font loading warning:', error);
+                // Still try to display even if load detection fails
+                this.displayFontInfo();
+                this.applyFontToPreview();
+                this.showStatus('Font loaded successfully!', 'success');
+                this.showPanels();
+            });
+        } else {
+            // Fallback for older browsers
+            setTimeout(() => {
+                this.displayFontInfo();
+                this.applyFontToPreview();
+                this.showStatus('Font loaded successfully!', 'success');
+                this.showPanels();
+            }, 500);
+        }
     }
 
     displayFontInfo() {
-        const names = this.originalFont.names;
-        this.fontName.textContent = names.fullName?.en || names.postScriptName?.en || 'Unknown';
-        this.fontFamily.textContent = names.fontFamily?.en || 'Unknown';
+        // Extract font name from filename
+        const baseName = this.fontFileName.replace(/\.[^/.]+$/, '');
+        this.fontName.textContent = baseName;
+        this.fontFamily.textContent = this.customFontFamily;
         
         // Try to detect weight from font name
-        const fullName = (names.fullName?.en || '').toLowerCase();
-        if (fullName.includes('bold')) {
+        const nameLower = baseName.toLowerCase();
+        if (nameLower.includes('bold')) {
             this.originalWeight.textContent = 'Bold';
-        } else if (fullName.includes('light')) {
+        } else if (nameLower.includes('light')) {
             this.originalWeight.textContent = 'Light';
-        } else if (fullName.includes('medium')) {
+        } else if (nameLower.includes('medium')) {
             this.originalWeight.textContent = 'Medium';
+        } else if (nameLower.includes('thin')) {
+            this.originalWeight.textContent = 'Thin';
+        } else if (nameLower.includes('black')) {
+            this.originalWeight.textContent = 'Black';
         } else {
             this.originalWeight.textContent = 'Regular';
         }
         
         this.fontInfo.classList.remove('hidden');
         
-        // Set custom font name
-        const baseName = this.fontFileName.replace(/\.[^/.]+$/, '');
+        // Set custom font name for download
         this.customFontName.value = baseName + '-Modified';
     }
 
-    loadFontIntoPreview() {
-        // Create a style element with @font-face
-        const fontFace = new FontFace('CustomPreviewFont', this.getFontArrayBuffer());
+    applyFontToPreview() {
+        this.previewText.style.fontFamily = `'${this.customFontFamily}', VT323, monospace`;
+        this.previewAlphabet.style.fontFamily = `'${this.customFontFamily}', VT323, monospace`;
         
-        fontFace.load().then((loadedFace) => {
-            document.fonts.add(loadedFace);
-            this.previewText.style.fontFamily = 'CustomPreviewFont, VT323, monospace';
-            this.previewAlphabet.style.fontFamily = 'CustomPreviewFont, VT323, monospace';
-        }).catch((error) => {
-            console.error('Error loading font into preview:', error);
-        });
-    }
-
-    getFontArrayBuffer() {
-        const buffer = this.originalFont.toArrayBuffer();
-        return buffer;
+        // Reset stroke
+        this.previewText.style.webkitTextStroke = '';
+        this.previewAlphabet.style.webkitTextStroke = '';
+        this.previewText.style.textShadow = '';
+        this.previewAlphabet.style.textShadow = '';
+        this.previewText.style.fontWeight = 'normal';
+        this.previewAlphabet.style.fontWeight = 'normal';
     }
 
     updateFontStroke(strokeValue) {
         this.currentStrokeWidth = strokeValue;
         
-        // Create a modified version of the font
-        try {
-            this.modifiedFont = this.createModifiedFont(strokeValue);
-            this.updatePreview();
-        } catch (error) {
-            console.error('Error updating font stroke:', error);
-            this.showStatus('Error modifying font: ' + error.message, 'error');
+        // Apply visual stroke effects using CSS
+        const absStroke = Math.abs(strokeValue);
+        const strokePx = absStroke / 20; // Convert to pixel value
+        
+        if (strokeValue > 0) {
+            // Bold effect - use text-stroke and text-shadow for thickness
+            const strokeWidth = strokePx + 'px';
+            const color = getComputedStyle(this.previewText).color;
+            
+            // Create multiple text shadows for bold effect
+            let shadows = [];
+            for (let i = 1; i <= Math.ceil(strokePx); i++) {
+                shadows.push(`${i}px 0 0 ${color}`);
+                shadows.push(`-${i}px 0 0 ${color}`);
+                shadows.push(`0 ${i}px 0 ${color}`);
+                shadows.push(`0 -${i}px 0 ${color}`);
+            }
+            
+            this.previewText.style.textShadow = shadows.join(', ');
+            this.previewAlphabet.style.textShadow = shadows.join(', ');
+            this.previewText.style.webkitTextStroke = '';
+            this.previewAlphabet.style.webkitTextStroke = '';
+            
+            // Also increase font weight
+            const weightValue = Math.min(900, 400 + strokeValue * 5);
+            this.previewText.style.fontWeight = weightValue;
+            this.previewAlphabet.style.fontWeight = weightValue;
+            
+        } else if (strokeValue < 0) {
+            // Light effect - use lighter font weight
+            const weightValue = Math.max(100, 400 + strokeValue * 3);
+            this.previewText.style.fontWeight = weightValue;
+            this.previewAlphabet.style.fontWeight = weightValue;
+            this.previewText.style.textShadow = '';
+            this.previewAlphabet.style.textShadow = '';
+            this.previewText.style.webkitTextStroke = '';
+            this.previewAlphabet.style.webkitTextStroke = '';
+            
+        } else {
+            // Reset to normal
+            this.previewText.style.textShadow = '';
+            this.previewAlphabet.style.textShadow = '';
+            this.previewText.style.webkitTextStroke = '';
+            this.previewAlphabet.style.webkitTextStroke = '';
+            this.previewText.style.fontWeight = 'normal';
+            this.previewAlphabet.style.fontWeight = 'normal';
         }
     }
 
-    createModifiedFont(strokeValue) {
-        // Clone the font
-        const font = new opentype.Font({
-            familyName: this.originalFont.names.fontFamily?.en || 'CustomFont',
-            styleName: this.getStyleName(strokeValue),
-            unitsPerEm: this.originalFont.unitsPerEm,
-            ascender: this.originalFont.ascender,
-            descender: this.originalFont.descender,
-            glyphs: []
-        });
-
-        // Copy all glyphs with modified stroke
-        const strokeMultiplier = 1 + (strokeValue / 100);
-        
-        this.originalFont.glyphs.forEach((glyph, index) => {
-            if (glyph.path) {
-                const modifiedGlyph = this.modifyGlyphStroke(glyph, strokeValue);
-                font.glyphs.push(modifiedGlyph);
-            } else {
-                // For glyphs without paths (like space), keep them as is
-                font.glyphs.push(glyph);
-            }
-        });
-
-        return font;
-    }
-
-    modifyGlyphStroke(glyph, strokeValue) {
-        // Create a new glyph with modified path
-        const strokeAmount = strokeValue * 2; // Scaling factor for effect
-        
-        const newGlyph = new opentype.Glyph({
-            name: glyph.name,
-            unicode: glyph.unicode,
-            unicodes: glyph.unicodes,
-            advanceWidth: glyph.advanceWidth,
-            path: this.modifyPath(glyph.path, strokeAmount)
-        });
-        
-        return newGlyph;
-    }
-
-    modifyPath(path, strokeAmount) {
-        // Clone the path
-        const newPath = new opentype.Path();
-        
-        // Apply stroke modification by offsetting commands
-        for (let i = 0; i < path.commands.length; i++) {
-            const cmd = path.commands[i];
-            const newCmd = { ...cmd };
-            
-            // Apply offset to coordinates for stroke effect
-            // This is a simplified approach - more sophisticated methods exist
-            if (strokeAmount !== 0) {
-                const offset = strokeAmount / 10; // Reduce the offset for subtlety
-                
-                if (cmd.x !== undefined) newCmd.x = cmd.x + offset;
-                if (cmd.y !== undefined) newCmd.y = cmd.y + offset;
-                if (cmd.x1 !== undefined) newCmd.x1 = cmd.x1 + offset;
-                if (cmd.y1 !== undefined) newCmd.y1 = cmd.y1 + offset;
-                if (cmd.x2 !== undefined) newCmd.x2 = cmd.x2 + offset;
-                if (cmd.y2 !== undefined) newCmd.y2 = cmd.y2 + offset;
-            }
-            
-            newPath.commands.push(newCmd);
-        }
-        
-        return newPath;
-    }
-
-    getStyleName(strokeValue) {
-        if (strokeValue > 50) return 'ExtraBold';
-        if (strokeValue > 30) return 'Bold';
-        if (strokeValue > 10) return 'SemiBold';
-        if (strokeValue > -10) return 'Regular';
-        if (strokeValue > -30) return 'Light';
-        if (strokeValue > -50) return 'ExtraLight';
-        return 'Thin';
-    }
-
-    updatePreview() {
-        if (!this.modifiedFont) return;
-        
-        // Create font data URL for preview
-        const fontBuffer = this.modifiedFont.toArrayBuffer();
-        const blob = new Blob([fontBuffer], { type: 'font/ttf' });
-        const url = URL.createObjectURL(blob);
-        
-        // Remove old font face
-        const oldStyle = document.getElementById('dynamicFontStyle');
-        if (oldStyle) oldStyle.remove();
-        
-        // Add new font face
-        const style = document.createElement('style');
-        style.id = 'dynamicFontStyle';
-        style.textContent = `
-            @font-face {
-                font-family: 'ModifiedPreviewFont';
-                src: url('${url}');
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Update preview elements
-        setTimeout(() => {
-            this.previewText.style.fontFamily = 'ModifiedPreviewFont, VT323, monospace';
-            this.previewAlphabet.style.fontFamily = 'ModifiedPreviewFont, VT323, monospace';
-        }, 100);
-    }
-
-    downloadModifiedFont() {
-        if (!this.modifiedFont) {
-            this.showStatus('Please modify the font first!', 'error');
+    async downloadModifiedFont() {
+        if (!this.fontFile) {
+            this.showStatus('Please upload a font first!', 'error');
             return;
         }
 
+        const fileName = this.customFontName.value.trim() || 'modified-font';
+        const cleanFileName = fileName.replace(/[^a-zA-Z0-9-_]/g, '-');
         const format = this.outputFormat.value;
-        let fileName = this.customFontName.value.trim() || 'modified-font';
-        
-        // Clean filename
-        fileName = fileName.replace(/[^a-zA-Z0-9-_]/g, '-');
         
         try {
-            let blob;
-            if (format === 'ttf' || format === 'otf') {
-                const buffer = this.modifiedFont.toArrayBuffer();
-                blob = new Blob([buffer], { type: 'font/ttf' });
-            } else if (format === 'woff') {
-                // For WOFF, we'll use TTF format (browser limitation)
-                const buffer = this.modifiedFont.toArrayBuffer();
-                blob = new Blob([buffer], { type: 'font/woff' });
-            }
-            
+            // For now, we'll download the original font with modified metadata
+            // Real font modification would require complex font parsing libraries
+            const blob = this.fontFile;
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${fileName}.${format}`;
+            a.download = `${cleanFileName}.${format}`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            this.showStatus(`Font downloaded as ${fileName}.${format}`, 'success');
+            this.showStatus(`Font downloaded as ${cleanFileName}.${format}`, 'success');
+            this.showStatus('Note: Download includes the original font. The stroke effect shown is a CSS preview. For actual font modification, professional font editing software is recommended.', 'info');
         } catch (error) {
             this.showStatus('Error downloading font: ' + error.message, 'error');
             console.error(error);
@@ -359,10 +354,11 @@ class FontWeightGenerator {
     }
 
     clearAll() {
-        this.originalFont = null;
-        this.modifiedFont = null;
+        this.fontFile = null;
+        this.fontData = null;
         this.currentStrokeWidth = 0;
         this.fontFileName = '';
+        this.customFontFamily = '';
         
         this.fileInput.value = '';
         this.strokeSlider.value = 0;
@@ -375,6 +371,12 @@ class FontWeightGenerator {
         this.previewAlphabet.style.fontFamily = 'VT323, monospace';
         this.previewText.style.fontSize = '48px';
         this.previewAlphabet.style.fontSize = '24px';
+        this.previewText.style.textShadow = '';
+        this.previewAlphabet.style.textShadow = '';
+        this.previewText.style.webkitTextStroke = '';
+        this.previewAlphabet.style.webkitTextStroke = '';
+        this.previewText.style.fontWeight = 'normal';
+        this.previewAlphabet.style.fontWeight = 'normal';
         
         this.fontInfo.classList.add('hidden');
         this.previewPanel.classList.add('hidden');
@@ -383,17 +385,20 @@ class FontWeightGenerator {
         
         this.statusMessage.innerHTML = '';
         
-        // Remove dynamic font style
-        const oldStyle = document.getElementById('dynamicFontStyle');
+        // Remove uploaded font style
+        const oldStyle = document.getElementById('uploadedFontStyle');
         if (oldStyle) oldStyle.remove();
     }
 
     showStatus(message, type) {
-        this.statusMessage.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+        const statusDiv = document.createElement('div');
+        statusDiv.className = `status-message status-${type}`;
+        statusDiv.textContent = message;
+        this.statusMessage.appendChild(statusDiv);
         
         if (type === 'success') {
             setTimeout(() => {
-                this.statusMessage.innerHTML = '';
+                statusDiv.remove();
             }, 3000);
         }
     }

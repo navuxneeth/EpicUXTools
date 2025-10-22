@@ -111,8 +111,8 @@
                         <div class="upload-icon">📝</div>
                         <h3>DROP FONT FILE HERE</h3>
                         <p>or click to select</p>
-                        <p style="margin-top: 10px; font-size: 0.9rem;">Supports: TTF, OTF, WOFF</p>
-                        <input type="file" id="fileInput" accept=".ttf,.otf,.woff" hidden>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Supports: TTF, OTF, WOFF, WOFF2</p>
+                        <input type="file" id="fileInput" accept=".ttf,.otf,.woff,.woff2" hidden>
                     </div>
                     
                     <div id="statusMessage"></div>
@@ -210,6 +210,7 @@
                                 <option value="ttf">TrueType Font (.ttf)</option>
                                 <option value="otf">OpenType Font (.otf)</option>
                                 <option value="woff">Web Open Font Format (.woff)</option>
+                                <option value="woff2">Web Open Font Format 2 (.woff2)</option>
                             </select>
                         </div>
                         
@@ -237,7 +238,6 @@
         </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
