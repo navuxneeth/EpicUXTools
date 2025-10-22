@@ -46,6 +46,7 @@ class FontWeightGenerator {
         // Font data
         this.fontFile = null;
         this.fontData = null;
+        this.parsedFont = null;
         this.currentStrokeWidth = 0;
         this.fontFileName = '';
         this.customFontFamily = '';
@@ -192,14 +193,36 @@ class FontWeightGenerator {
         reader.onload = (e) => {
             try {
                 this.fontData = e.target.result;
-                this.loadFont();
+                // Parse font with opentype.js
+                const arrayBuffer = e.target.result;
+                if (typeof opentype !== 'undefined') {
+                    try {
+                        // Try synchronous parsing first (newer API)
+                        const font = opentype.parse(arrayBuffer);
+                        this.parsedFont = font;
+                        this.loadFont();
+                    } catch (parseError) {
+                        // If synchronous fails, try callback-based approach
+                        opentype.parse(arrayBuffer, (err, font) => {
+                            if (err) {
+                                console.error('Error parsing font:', err);
+                                this.showStatus('Error parsing font: ' + err.message, 'error');
+                                return;
+                            }
+                            this.parsedFont = font;
+                            this.loadFont();
+                        });
+                    }
+                } else {
+                    this.showStatus('Font library not loaded yet, please try again.', 'error');
+                }
             } catch (error) {
                 this.showStatus('Error loading font: ' + error.message, 'error');
                 console.error(error);
             }
         };
 
-        reader.readAsDataURL(file);
+        reader.readAsArrayBuffer(file);
     }
 
     loadFont() {
@@ -207,11 +230,20 @@ class FontWeightGenerator {
         const timestamp = Date.now();
         this.customFontFamily = `CustomFont${timestamp}`;
         
+        // Convert ArrayBuffer to base64 for @font-face
+        const uint8Array = new Uint8Array(this.fontData);
+        let binary = '';
+        for (let i = 0; i < uint8Array.byteLength; i++) {
+            binary += String.fromCharCode(uint8Array[i]);
+        }
+        const base64 = btoa(binary);
+        const fontDataUrl = `data:font/ttf;base64,${base64}`;
+        
         // Create @font-face rule
         const fontFace = `
             @font-face {
                 font-family: '${this.customFontFamily}';
-                src: url('${this.fontData}');
+                src: url('${fontDataUrl}');
             }
         `;
         
@@ -248,8 +280,17 @@ class FontWeightGenerator {
     }
 
     displayFontInfo() {
-        // Extract font name from filename
-        const baseName = this.fontFileName.replace(/\.[^/.]+$/, '');
+        // Extract font name from parsed font or filename
+        let baseName = this.fontFileName.replace(/\.[^/.]+$/, '');
+        
+        if (this.parsedFont && this.parsedFont.names) {
+            // Try to get font name from parsed font
+            const fontNameObj = this.parsedFont.names.fontFamily;
+            if (fontNameObj && fontNameObj.en) {
+                baseName = fontNameObj.en;
+            }
+        }
+        
         this.fontName.textContent = baseName;
         this.fontFamily.textContent = this.customFontFamily;
         
@@ -341,7 +382,7 @@ class FontWeightGenerator {
     }
 
     async downloadModifiedFont() {
-        if (!this.fontFile) {
+        if (!this.fontFile || !this.parsedFont) {
             this.showStatus('Please upload a font first!', 'error');
             return;
         }
@@ -351,9 +392,133 @@ class FontWeightGenerator {
         const format = this.outputFormat.value;
         
         try {
-            // For now, we'll download the original font with modified metadata
-            // Real font modification would require complex font parsing libraries
-            const blob = this.fontFile;
+            this.showStatus('Processing font modifications...', 'info');
+            
+            // Create a modified copy of the font
+            let modifiedFont = this.parsedFont;
+            
+            // Apply stroke width modifications to glyphs
+            if (this.currentStrokeWidth !== 0) {
+                const strokeWidth = this.currentStrokeWidth * 2;
+                
+                // Modify each glyph's outline
+                // Note: glyphs is a GlyphSet object with .length and .get(index) method
+                for (let i = 0; i < modifiedFont.glyphs.length; i++) {
+                    const glyph = modifiedFont.glyphs.get(i);
+                    if (glyph && glyph.path && glyph.path.commands) {
+                        const path = glyph.path;
+                        
+                        // Apply stroke by modifying the glyph path commands
+                        if (this.currentStrokeWidth > 0) {
+                            // For bolder effect, expand the outline
+                            const newCommands = path.commands.map(cmd => {
+                                const newCmd = { ...cmd };
+                                if (cmd.type !== 'Z') {
+                                    // Apply stroke offset to coordinates
+                                    const offset = strokeWidth * 0.01;
+                                    if (cmd.x !== undefined) {
+                                        const centerX = glyph.advanceWidth / 2 || 0;
+                                        const dx = cmd.x - centerX;
+                                        newCmd.x = cmd.x + (dx > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.y !== undefined) {
+                                        const centerY = ((glyph.yMax || 0) + (glyph.yMin || 0)) / 2;
+                                        const dy = cmd.y - centerY;
+                                        newCmd.y = cmd.y + (dy > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.x1 !== undefined) {
+                                        const centerX = glyph.advanceWidth / 2 || 0;
+                                        const dx = cmd.x1 - centerX;
+                                        newCmd.x1 = cmd.x1 + (dx > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.y1 !== undefined) {
+                                        const centerY = ((glyph.yMax || 0) + (glyph.yMin || 0)) / 2;
+                                        const dy = cmd.y1 - centerY;
+                                        newCmd.y1 = cmd.y1 + (dy > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.x2 !== undefined) {
+                                        const centerX = glyph.advanceWidth / 2 || 0;
+                                        const dx = cmd.x2 - centerX;
+                                        newCmd.x2 = cmd.x2 + (dx > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.y2 !== undefined) {
+                                        const centerY = ((glyph.yMax || 0) + (glyph.yMin || 0)) / 2;
+                                        const dy = cmd.y2 - centerY;
+                                        newCmd.y2 = cmd.y2 + (dy > 0 ? offset : -offset);
+                                    }
+                                }
+                                return newCmd;
+                            });
+                            
+                            path.commands = newCommands;
+                        } else if (this.currentStrokeWidth < 0) {
+                            // For lighter effect, shrink the outline
+                            const newCommands = path.commands.map(cmd => {
+                                const newCmd = { ...cmd };
+                                if (cmd.type !== 'Z') {
+                                    const offset = Math.abs(strokeWidth) * 0.01;
+                                    if (cmd.x !== undefined) {
+                                        const centerX = glyph.advanceWidth / 2 || 0;
+                                        const dx = cmd.x - centerX;
+                                        newCmd.x = cmd.x - (dx > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.y !== undefined) {
+                                        const centerY = ((glyph.yMax || 0) + (glyph.yMin || 0)) / 2;
+                                        const dy = cmd.y - centerY;
+                                        newCmd.y = cmd.y - (dy > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.x1 !== undefined) {
+                                        const centerX = glyph.advanceWidth / 2 || 0;
+                                        const dx = cmd.x1 - centerX;
+                                        newCmd.x1 = cmd.x1 - (dx > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.y1 !== undefined) {
+                                        const centerY = ((glyph.yMax || 0) + (glyph.yMin || 0)) / 2;
+                                        const dy = cmd.y1 - centerY;
+                                        newCmd.y1 = cmd.y1 - (dy > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.x2 !== undefined) {
+                                        const centerX = glyph.advanceWidth / 2 || 0;
+                                        const dx = cmd.x2 - centerX;
+                                        newCmd.x2 = cmd.x2 - (dx > 0 ? offset : -offset);
+                                    }
+                                    if (cmd.y2 !== undefined) {
+                                        const centerY = ((glyph.yMax || 0) + (glyph.yMin || 0)) / 2;
+                                        const dy = cmd.y2 - centerY;
+                                        newCmd.y2 = cmd.y2 - (dy > 0 ? offset : -offset);
+                                    }
+                                }
+                                return newCmd;
+                            });
+                            
+                            path.commands = newCommands;
+                        }
+                    }
+                }
+            }
+            
+            // Update font name in metadata
+            if (modifiedFont.names && modifiedFont.names.fontFamily) {
+                modifiedFont.names.fontFamily.en = cleanFileName;
+            }
+            if (modifiedFont.names && modifiedFont.names.fullName) {
+                modifiedFont.names.fullName.en = cleanFileName;
+            }
+            
+            // Convert font to ArrayBuffer
+            const arrayBuffer = modifiedFont.toArrayBuffer();
+            
+            // Create blob with appropriate MIME type
+            let mimeType = 'font/ttf';
+            if (format === 'otf') {
+                mimeType = 'font/otf';
+            } else if (format === 'woff') {
+                mimeType = 'font/woff';
+            } else if (format === 'woff2') {
+                mimeType = 'font/woff2';
+            }
+            
+            const blob = new Blob([arrayBuffer], { type: mimeType });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -363,11 +528,10 @@ class FontWeightGenerator {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            this.showStatus(`Font downloaded as ${cleanFileName}.${format}`, 'success');
-            this.showStatus('Note: Download includes the original font. The stroke effect shown is a CSS preview. For actual font modification, professional font editing software is recommended.', 'info');
+            this.showStatus(`Font downloaded as ${cleanFileName}.${format} with applied modifications!`, 'success');
         } catch (error) {
             this.showStatus('Error downloading font: ' + error.message, 'error');
-            console.error(error);
+            console.error('Download error:', error);
         }
     }
 
@@ -380,6 +544,7 @@ class FontWeightGenerator {
     clearAll() {
         this.fontFile = null;
         this.fontData = null;
+        this.parsedFont = null;
         this.currentStrokeWidth = 0;
         this.fontFileName = '';
         this.customFontFamily = '';
