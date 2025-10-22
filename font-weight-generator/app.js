@@ -29,6 +29,14 @@ class FontWeightGenerator {
         this.sizeSlider = document.getElementById('sizeSlider');
         this.sizeValue = document.getElementById('sizeValue');
         
+        // Letter spacing controls
+        this.letterSpacingSlider = document.getElementById('letterSpacingSlider');
+        this.letterSpacingValue = document.getElementById('letterSpacingValue');
+        
+        // Line height controls
+        this.lineHeightSlider = document.getElementById('lineHeightSlider');
+        this.lineHeightValue = document.getElementById('lineHeightValue');
+        
         // Download controls
         this.outputFormat = document.getElementById('outputFormat');
         this.customFontName = document.getElementById('customFontName');
@@ -136,6 +144,22 @@ class FontWeightGenerator {
             this.sizeValue.textContent = size + 'px';
             this.previewText.style.fontSize = size + 'px';
             this.previewAlphabet.style.fontSize = (size / 2) + 'px';
+        });
+
+        // Letter spacing controls
+        this.letterSpacingSlider.addEventListener('input', (e) => {
+            const spacing = e.target.value;
+            this.letterSpacingValue.textContent = spacing + 'px';
+            this.previewText.style.letterSpacing = spacing + 'px';
+            this.previewAlphabet.style.letterSpacing = spacing + 'px';
+        });
+
+        // Line height controls
+        this.lineHeightSlider.addEventListener('input', (e) => {
+            const lineHeight = e.target.value;
+            this.lineHeightValue.textContent = lineHeight;
+            this.previewText.style.lineHeight = lineHeight;
+            this.previewAlphabet.style.lineHeight = lineHeight;
         });
 
         // Download button
@@ -366,11 +390,19 @@ class FontWeightGenerator {
         this.sliderValue.textContent = 0;
         this.sizeSlider.value = 48;
         this.sizeValue.textContent = '48px';
+        this.letterSpacingSlider.value = 0;
+        this.letterSpacingValue.textContent = '0px';
+        this.lineHeightSlider.value = 1.4;
+        this.lineHeightValue.textContent = '1.4';
         
         this.previewText.style.fontFamily = 'VT323, monospace';
         this.previewAlphabet.style.fontFamily = 'VT323, monospace';
         this.previewText.style.fontSize = '48px';
         this.previewAlphabet.style.fontSize = '24px';
+        this.previewText.style.letterSpacing = '';
+        this.previewAlphabet.style.letterSpacing = '';
+        this.previewText.style.lineHeight = '';
+        this.previewAlphabet.style.lineHeight = '';
         this.previewText.style.textShadow = '';
         this.previewAlphabet.style.textShadow = '';
         this.previewText.style.webkitTextStroke = '';
