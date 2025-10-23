@@ -4,7 +4,7 @@
     src: url('./assets/VT323-Regular.ttf') format('truetype');
 }
 
-/* PixelOS Theme (Default) */
+/* PixelOS Theme (Default - Dark) */
 :root {
     /* Color Palette - PixelOS */
     --color-bg: #283238;
@@ -36,6 +36,29 @@
     /* Border */
     --border-width: 3px;
     --border-style: dashed;
+}
+
+/* Light Theme */
+:root.theme-light {
+    /* Color Palette - Light */
+    --color-bg: #f5f7f6;
+    --color-text: #2d3436;
+    --color-card: #ffffff;
+    --color-accent: #3d9c8c;
+    --color-accent-hover: #2e7b6e;
+    
+    /* Derived colors for consistency */
+    --color-bg-alt: #ffffff;
+    --color-primary: #3d9c8c;
+    --color-secondary: #2e7b6e;
+    --color-success: #3d9c8c;
+    --color-text-dim: #636e72;
+    --color-border: #3d9c8c;
+    --color-panel-bg: #ffffff;
+    --color-panel-border: #3d9c8c;
+    --color-input-bg: #f5f7f6;
+    --color-shadow: rgba(61, 156, 140, 0.3);
+    --color-hover: #2e7b6e;
 }
 
 /* Ocean Theme (Alternative) */
@@ -323,6 +346,29 @@ body {
     margin-top: var(--space-sm);
 }
 
+.footer-links {
+    margin-top: var(--space-md);
+    font-size: 1rem;
+}
+
+.footer-links a {
+    color: var(--color-primary);
+    text-decoration: none;
+    margin: 0 var(--space-sm);
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: var(--color-hover);
+    text-decoration: underline;
+}
+
+.footer-copyright {
+    font-size: 0.9rem;
+    margin-top: var(--space-md);
+    color: var(--color-text-dim);
+}
+
 /* Status Messages */
 .status-message {
     padding: var(--space-md);
@@ -367,6 +413,37 @@ body {
 /* Hidden */
 .hidden {
     display: none !important;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--color-primary);
+    color: white;
+    border: 2px solid var(--color-primary);
+    padding: var(--space-sm) var(--space-md);
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 3px 3px 0px var(--color-shadow);
+    transition: all 0.2s;
+    z-index: 1000;
+}
+
+.theme-toggle:hover {
+    background: var(--color-hover);
+    border-color: var(--color-hover);
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px var(--color-shadow);
+}
+
+.theme-toggle:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px var(--color-shadow);
 }
 
 /* Responsive */
