@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASPECT RATIO CALCULATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <script src="../theme.js"></script>
+    <style>
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .input-section {
+            border: 3px dashed var(--color-border);
+            padding: var(--space-lg);
+            background: var(--color-panel-bg);
+        }
+        
+        .input-group {
+            margin-bottom: var(--space-md);
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: var(--space-sm);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+            color: var(--color-text);
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+        }
+        
+        .preset-ratios {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+        
+        .preset-btn {
+            padding: var(--space-sm);
+            background: var(--color-accent);
+            color: white;
+            border: 2px dashed var(--color-border);
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .preset-btn:hover {
+            background: var(--color-accent-hover);
+            transform: translate(-2px, -2px);
+        }
+        
+        .results-section {
+            border: 3px dashed var(--color-border);
+            padding: var(--space-lg);
+            background: var(--color-panel-bg);
+        }
+        
+        .result-item {
+            margin-bottom: var(--space-md);
+            padding: var(--space-md);
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+        }
+        
+        .result-label {
+            color: var(--color-primary);
+            font-weight: bold;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .result-value {
+            font-size: 1.5rem;
+            color: var(--color-text);
+        }
+        
+        .visual-preview {
+            border: 2px dashed var(--color-border);
+            background: var(--color-input-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            margin-top: var(--space-md);
+            position: relative;
+        }
+        
+        .preview-box {
+            border: 3px solid var(--color-accent);
+            background: rgba(106, 176, 162, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ ASPECT RATIO CALCULATOR ◆</h1>
+            <p class="subtitle">Calculate aspect ratios and resize dimensions</p>
+        </header>
+
+        <main class="main-content">
+            <div class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ CALCULATOR ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="calculator-grid">
+                        <div class="input-section">
+                            <h3>► INPUT DIMENSIONS</h3>
+                            <div class="input-group">
+                                <label>WIDTH (px)</label>
+                                <input type="number" id="width" value="1920" min="1">
+                            </div>
+                            <div class="input-group">
+                                <label>HEIGHT (px)</label>
+                                <input type="number" id="height" value="1080" min="1">
+                            </div>
+                            
+                            <h3>► PRESET RATIOS</h3>
+                            <div class="preset-ratios">
+                                <button class="preset-btn" onclick="setRatio(16, 9)">16:9</button>
+                                <button class="preset-btn" onclick="setRatio(9, 16)">9:16</button>
+                                <button class="preset-btn" onclick="setRatio(4, 3)">4:3</button>
+                                <button class="preset-btn" onclick="setRatio(3, 2)">3:2</button>
+                                <button class="preset-btn" onclick="setRatio(1, 1)">1:1</button>
+                                <button class="preset-btn" onclick="setRatio(21, 9)">21:9</button>
+                            </div>
+                        </div>
+                        
+                        <div class="results-section">
+                            <h3>► RESULTS</h3>
+                            <div class="result-item">
+                                <div class="result-label">ASPECT RATIO</div>
+                                <div class="result-value" id="ratio">16:9</div>
+                            </div>
+                            <div class="result-item">
+                                <div class="result-label">DECIMAL</div>
+                                <div class="result-value" id="decimal">1.778</div>
+                            </div>
+                            <div class="result-item">
+                                <div class="result-label">PERCENTAGE</div>
+                                <div class="result-value" id="percentage">56.25%</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-section" style="margin-top: var(--space-lg);">
+                        <h3>► RESIZE CALCULATOR</h3>
+                        <p style="color: var(--color-text-dim); margin-bottom: var(--space-md);">
+                            Enter a new width OR height to calculate the other dimension
+                        </p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                            <div class="input-group">
+                                <label>NEW WIDTH</label>
+                                <input type="number" id="newWidth" placeholder="Enter width" min="1">
+                            </div>
+                            <div class="input-group">
+                                <label>NEW HEIGHT</label>
+                                <input type="number" id="newHeight" placeholder="Enter height" min="1">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="visual-preview">
+                        <div class="preview-box" id="previewBox">
+                            <span id="previewText">16:9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ ASPECT RATIO CALCULATOR ▼</p>
+            <p class="footer-note">Calculate and maintain aspect ratios</p>
+            <div class="footer-links">
+                <span>Made by <a href="https://www.linkedin.com/in/navaneeth-sankar-k-p" target="_blank" rel="noopener noreferrer">Navaneeth Sankar K P</a></span>
+                <span>|</span>
+                <span><a href="https://github.com/navuxneeth/EpicUXTools" target="_blank" rel="noopener noreferrer">Github Repo</a></span>
+            </div>
+            <p class="footer-copyright">Copyright © 2025</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
