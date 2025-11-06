@@ -48,8 +48,16 @@ function update() {
 });
 
 function copyCSS() {
-    navigator.clipboard.writeText(cssCode.textContent);
-    alert('CSS copied to clipboard!');
+    navigator.clipboard.writeText(cssCode.textContent).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '► COPIED! ◄';
+        btn.style.background = 'var(--color-success)';
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = '';
+        }, 2000);
+    });
 }
 
 update();

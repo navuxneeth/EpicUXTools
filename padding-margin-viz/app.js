@@ -6,11 +6,11 @@ function update() {
     const [pt, pr, pb, pl, mt, mr, mb, ml] = inputs.map(i => parseInt(i.value) || 0);
     
     viz.innerHTML = `
-        <div style="background: #ff6b6b; padding: ${mt}px ${mr}px ${mb}px ${ml}px;">
-            <span style="font-size: 0.8rem; color: white;">MARGIN</span>
-            <div style="background: #4ecdc4; padding: ${pt}px ${pr}px ${pb}px ${pl}px;">
-                <span style="font-size: 0.8rem; color: white;">PADDING</span>
-                <div style="background: #45b7d1; padding: 20px; color: white;">CONTENT</div>
+        <div style="background: var(--color-accent); opacity: 0.6; padding: ${mt}px ${mr}px ${mb}px ${ml}px;">
+            <span style="font-size: 0.8rem; color: var(--color-text);">MARGIN</span>
+            <div style="background: var(--color-secondary); opacity: 0.8; padding: ${pt}px ${pr}px ${pb}px ${pl}px;">
+                <span style="font-size: 0.8rem; color: var(--color-text);">PADDING</span>
+                <div style="background: var(--color-primary); padding: 20px; color: var(--color-text);">CONTENT</div>
             </div>
         </div>
     `;

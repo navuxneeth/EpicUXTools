@@ -26,7 +26,12 @@ function removeItem(index) {
 }
 
 function printChecklist() {
+    const printWindow = document.createElement('iframe');
+    printWindow.style.display = 'none';
+    document.body.appendChild(printWindow);
+    
     const content = `
+        <!DOCTYPE html>
         <html><head><style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             h1 { border-bottom: 2px solid #000; padding-bottom: 10px; }
@@ -36,7 +41,10 @@ function printChecklist() {
         ${items.map(item => `<div class="item">☐ ${item}</div>`).join('')}
         </body></html>
     `;
-    const win = window.open('', '', 'width=800,height=600');
-    win.document.write(content);
-    win.print();
+    
+    printWindow.contentDocument.write(content);
+    printWindow.contentDocument.close();
+    printWindow.contentWindow.print();
+    
+    setTimeout(() => document.body.removeChild(printWindow), 1000);
 }
