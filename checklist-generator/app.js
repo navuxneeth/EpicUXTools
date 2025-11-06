@@ -30,21 +30,37 @@ function printChecklist() {
     printWindow.style.display = 'none';
     document.body.appendChild(printWindow);
     
-    const content = `
-        <!DOCTYPE html>
-        <html><head><style>
-            body { font-family: Arial, sans-serif; padding: 20px; }
-            h1 { border-bottom: 2px solid #000; padding-bottom: 10px; }
-            .item { padding: 10px; border-bottom: 1px solid #ddd; }
-        </style></head><body>
-        <h1>${title.value || 'Checklist'}</h1>
-        ${items.map(item => `<div class="item">☐ ${item}</div>`).join('')}
-        </body></html>
+    const doc = printWindow.contentDocument;
+    doc.open();
+    
+    // Create safe HTML structure
+    const html = doc.createElement('html');
+    const head = doc.createElement('head');
+    const style = doc.createElement('style');
+    style.textContent = `
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { border-bottom: 2px solid #000; padding-bottom: 10px; }
+        .item { padding: 10px; border-bottom: 1px solid #ddd; }
     `;
+    head.appendChild(style);
     
-    printWindow.contentDocument.write(content);
-    printWindow.contentDocument.close();
+    const body = doc.createElement('body');
+    const h1 = doc.createElement('h1');
+    h1.textContent = title.value || 'Checklist';
+    body.appendChild(h1);
+    
+    items.forEach(item => {
+        const div = doc.createElement('div');
+        div.className = 'item';
+        div.textContent = '☐ ' + item;
+        body.appendChild(div);
+    });
+    
+    html.appendChild(head);
+    html.appendChild(body);
+    doc.appendChild(html);
+    doc.close();
+    
     printWindow.contentWindow.print();
-    
     setTimeout(() => document.body.removeChild(printWindow), 1000);
 }

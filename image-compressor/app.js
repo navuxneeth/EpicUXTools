@@ -60,11 +60,24 @@ function processImages(files) {
                     
                     const resultDiv = document.createElement('div');
                     resultDiv.style.cssText = 'border: 2px dashed var(--color-border); padding: var(--space-md); margin-bottom: var(--space-sm); background: var(--color-input-bg);';
-                    resultDiv.innerHTML = `
-                        <strong style="color: var(--color-primary);">${file.name}</strong><br>
-                        Original: ${(originalSize / 1024).toFixed(1)} KB → Compressed: ${(newSize / 1024).toFixed(1)} KB<br>
-                        <span style="color: var(--color-accent);">Saved: ${savings}%</span>
-                    `;
+                    
+                    // Create elements safely to avoid XSS
+                    const nameStrong = document.createElement('strong');
+                    nameStrong.style.color = 'var(--color-primary)';
+                    nameStrong.textContent = file.name;
+                    
+                    const statsText = document.createTextNode(`Original: ${(originalSize / 1024).toFixed(1)} KB → Compressed: ${(newSize / 1024).toFixed(1)} KB`);
+                    
+                    const savingsSpan = document.createElement('span');
+                    savingsSpan.style.color = 'var(--color-accent)';
+                    savingsSpan.textContent = `Saved: ${savings}%`;
+                    
+                    resultDiv.appendChild(nameStrong);
+                    resultDiv.appendChild(document.createElement('br'));
+                    resultDiv.appendChild(statsText);
+                    resultDiv.appendChild(document.createElement('br'));
+                    resultDiv.appendChild(savingsSpan);
+                    
                     results.appendChild(resultDiv);
                 }, 'image/jpeg', quality.value / 100);
             };
