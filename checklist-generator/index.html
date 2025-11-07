@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKLIST GENERATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <script src="../theme.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ CHECKLIST GENERATOR ◆</h1>
+            <p class="subtitle">Create printable checklists for projects</p>
+        </header>
+        <main class="main-content">
+            <div class="pixel-panel">
+                <div class="panel-header"><span class="panel-title">◢ CREATE CHECKLIST ◣</span></div>
+                <div class="panel-content">
+                    <div style="margin-bottom: var(--space-lg);">
+                        <label style="display: block; margin-bottom: var(--space-sm); font-weight: bold; color: var(--color-primary);">CHECKLIST TITLE</label>
+                        <input type="text" id="title" placeholder="Enter title" style="width: 100%; padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                    </div>
+                    <div style="margin-bottom: var(--space-lg);">
+                        <label style="display: block; margin-bottom: var(--space-sm); font-weight: bold; color: var(--color-primary);">ADD ITEM</label>
+                        <input type="text" id="newItem" placeholder="Enter item and press Enter" style="width: 100%; padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                    </div>
+                    <div id="items" style="margin-bottom: var(--space-lg);"></div>
+                    <button class="pixel-button" style="width: 100%;" onclick="printChecklist()">► PRINT CHECKLIST ◄</button>
+                </div>
+            </div>
+        </main>
+        <footer class="footer pixel-text">
+            <p>▼ CHECKLIST GENERATOR ▼</p>
+            <div class="footer-links">
+                <span>Made by <a href="https://www.linkedin.com/in/navaneeth-sankar-k-p" target="_blank" rel="noopener noreferrer">Navaneeth Sankar K P</a></span>
+                <span>|</span>
+                <span><a href="https://github.com/navuxneeth/EpicUXTools" target="_blank" rel="noopener noreferrer">Github Repo</a></span>
+            </div>
+            <p class="footer-copyright">Copyright © 2025</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

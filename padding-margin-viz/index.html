@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PADDING & MARGIN VISUALIZER</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <script src="../theme.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ PADDING & MARGIN VISUALIZER ◆</h1>
+            <p class="subtitle">Visualize CSS box model spacing</p>
+        </header>
+        <main class="main-content">
+            <div class="pixel-panel">
+                <div class="panel-header"><span class="panel-title">◢ BOX MODEL ◣</span></div>
+                <div class="panel-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg);">
+                        <div>
+                            <h3>► PADDING (px)</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-bottom: var(--space-md);">
+                                <input type="number" id="pt" placeholder="Top" value="20" style="padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <input type="number" id="pr" placeholder="Right" value="20" style="padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <input type="number" id="pb" placeholder="Bottom" value="20" style="padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <input type="number" id="pl" placeholder="Left" value="20" style="padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                            </div>
+                            <h3>► MARGIN (px)</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm);">
+                                <input type="number" id="mt" placeholder="Top" value="10" style="padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <input type="number" id="mr" placeholder="Right" value="10" style="padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <input type="number" id="mb" placeholder="Bottom" value="10" style="padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <input type="number" id="ml" placeholder="Left" value="10" style="padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                            </div>
+                            <div id="cssCode" style="margin-top: var(--space-lg); padding: var(--space-md); border: 2px dashed var(--color-border); background: var(--color-input-bg); font-family: monospace; white-space: pre;"></div>
+                        </div>
+                        <div id="visualization" style="border: 2px dashed var(--color-border); padding: var(--space-lg); background: var(--color-input-bg); min-height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer pixel-text">
+            <p>▼ PADDING & MARGIN VISUALIZER ▼</p>
+            <div class="footer-links">
+                <span>Made by <a href="https://www.linkedin.com/in/navaneeth-sankar-k-p" target="_blank" rel="noopener noreferrer">Navaneeth Sankar K P</a></span>
+                <span>|</span>
+                <span><a href="https://github.com/navuxneeth/EpicUXTools" target="_blank" rel="noopener noreferrer">Github Repo</a></span>
+            </div>
+            <p class="footer-copyright">Copyright © 2025</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

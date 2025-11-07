@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COLOR BLINDNESS SIMULATOR</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <script src="../theme.js"></script>
+    <style>
+        .upload-zone {
+            border: 3px dashed var(--color-border);
+            padding: var(--space-xl);
+            text-align: center;
+            background: var(--color-panel-bg);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .upload-zone:hover {
+            background: var(--color-bg-alt);
+            transform: translate(-2px, -2px);
+        }
+        
+        .upload-zone.dragover {
+            background: var(--color-accent);
+            color: white;
+        }
+        
+        .filter-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .filter-btn {
+            padding: var(--space-md);
+            background: var(--color-accent);
+            color: white;
+            border: 2px dashed var(--color-border);
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--color-accent-hover);
+            transform: translate(-2px, -2px);
+        }
+        
+        .filter-btn.active {
+            box-shadow: 0 0 20px var(--color-accent);
+        }
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+        
+        .preview-card {
+            border: 3px dashed var(--color-border);
+            padding: var(--space-md);
+            background: var(--color-panel-bg);
+        }
+        
+        .preview-title {
+            color: var(--color-primary);
+            font-weight: bold;
+            margin-bottom: var(--space-sm);
+            text-align: center;
+        }
+        
+        .preview-image {
+            width: 100%;
+            height: auto;
+            border: 2px dashed var(--color-border);
+        }
+        
+        #controls {
+            display: none;
+        }
+        
+        #controls.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ COLOR BLINDNESS SIMULATOR ◆</h1>
+            <p class="subtitle">Test your designs for color accessibility</p>
+        </header>
+
+        <main class="main-content">
+            <div class="pixel-panel">
+                <div class="panel-header">
+                    <span class="panel-title">◢ UPLOAD IMAGE ◣</span>
+                </div>
+                <div class="panel-content">
+                    <div class="upload-zone" id="uploadZone">
+                        <h2>► DRAG & DROP IMAGE HERE ◄</h2>
+                        <p>or click to browse</p>
+                        <p style="color: var(--color-text-dim); margin-top: var(--space-md);">
+                            Supports PNG, JPG, JPEG
+                        </p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    </div>
+                    
+                    <div id="controls">
+                        <h3>► SELECT VISION TYPE</h3>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="normal">NORMAL</button>
+                            <button class="filter-btn" data-filter="protanopia">PROTANOPIA</button>
+                            <button class="filter-btn" data-filter="deuteranopia">DEUTERANOPIA</button>
+                            <button class="filter-btn" data-filter="tritanopia">TRITANOPIA</button>
+                            <button class="filter-btn" data-filter="protanomaly">PROTANOMALY</button>
+                            <button class="filter-btn" data-filter="deuteranomaly">DEUTERANOMALY</button>
+                            <button class="filter-btn" data-filter="tritanomaly">TRITANOMALY</button>
+                            <button class="filter-btn" data-filter="achromatopsia">ACHROMATOPSIA</button>
+                            <button class="filter-btn" data-filter="achromatomaly">ACHROMATOMALY</button>
+                        </div>
+                        
+                        <div class="preview-grid">
+                            <div class="preview-card">
+                                <div class="preview-title">CURRENT VIEW</div>
+                                <canvas id="canvas" class="preview-image"></canvas>
+                            </div>
+                        </div>
+                        
+                        <button class="pixel-button" style="margin-top: var(--space-lg); width: 100%;" onclick="downloadImage()">
+                            ► DOWNLOAD SIMULATED IMAGE ◄
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer pixel-text">
+            <p>▼ COLOR BLINDNESS SIMULATOR ▼</p>
+            <p class="footer-note">Ensure your designs are accessible to everyone</p>
+            <div class="footer-links">
+                <span>Made by <a href="https://www.linkedin.com/in/navaneeth-sankar-k-p" target="_blank" rel="noopener noreferrer">Navaneeth Sankar K P</a></span>
+                <span>|</span>
+                <span><a href="https://github.com/navuxneeth/EpicUXTools" target="_blank" rel="noopener noreferrer">Github Repo</a></span>
+            </div>
+            <p class="footer-copyright">Copyright © 2025</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

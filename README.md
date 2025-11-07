@@ -242,6 +242,116 @@ Create customizable SVG icons for web projects.
   - Live preview
 - **Location:** `/svg-icon-generator/index.html`
 
+### 24. Aspect Ratio Calculator
+Calculate and maintain aspect ratios for responsive design.
+- **Features:**
+  - Calculate aspect ratio from dimensions
+  - Preset ratios (16:9, 9:16, 4:3, 3:2, 1:1, 21:9)
+  - Decimal and percentage conversions
+  - Resize calculator to maintain proportions
+  - Visual preview of aspect ratio
+- **Location:** `/aspect-ratio-calculator/index.html`
+
+### 25. Color Blindness Simulator
+Test designs for color accessibility with various color blindness types.
+- **Features:**
+  - Simulate 9 types of color vision deficiency
+  - Protanopia, Deuteranopia, Tritanopia
+  - Protanomaly, Deuteranomaly, Tritanomaly
+  - Achromatopsia and Achromatomaly
+  - Live preview comparison
+  - Download simulated images
+- **Location:** `/color-blindness-simulator/index.html`
+
+### 26. Image Compressor
+Reduce image file sizes while maintaining visual quality.
+- **Features:**
+  - Batch image compression
+  - Adjustable quality settings (1-100%)
+  - File size comparison and savings display
+  - Supports PNG, JPG, JPEG formats
+  - Download compressed images
+- **Location:** `/image-compressor/index.html`
+
+### 27. CSS Units Converter
+Convert between different CSS units for consistent sizing.
+- **Features:**
+  - Convert between px, rem, em, %, pt, vh, vw
+  - Adjustable base font size
+  - Real-time conversions for all units
+  - Shows all conversions simultaneously
+- **Location:** `/css-units-converter/index.html`
+
+### 28. Checklist Generator
+Create printable checklists for UX projects and workflows.
+- **Features:**
+  - Add custom checklist title
+  - Add unlimited items
+  - Remove items easily
+  - Print-friendly format
+  - Clean, organized layout
+- **Location:** `/checklist-generator/index.html`
+
+### 29. Padding & Margin Visualizer
+Visualize CSS box model spacing with interactive controls.
+- **Features:**
+  - Adjust padding for all four sides
+  - Adjust margin for all four sides
+  - Visual box model representation
+  - Live CSS code generation
+  - Color-coded spacing areas
+- **Location:** `/padding-margin-viz/index.html`
+
+### 30. Flexbox Playground
+Experiment with flexbox properties and generate CSS.
+- **Features:**
+  - Adjust flex-direction, justify-content, align-items
+  - Control flex-wrap and gap
+  - Live preview with sample items
+  - Instant CSS code generation
+  - Visual experimentation tool
+- **Location:** `/flexbox-playground/index.html`
+
+### 31. Button Generator
+Design and generate CSS buttons with custom styling.
+- **Features:**
+  - Customize text, colors, and sizing
+  - Adjust border radius, padding, font size
+  - Live preview of button
+  - Copy CSS code with one click
+  - Hover effect included
+- **Location:** `/button-generator/index.html`
+
+### 32. Icon Size Calculator
+Calculate optimal icon sizes for different platforms.
+- **Features:**
+  - Standard favicon sizes
+  - iOS icon sizes
+  - Android icon sizes
+  - Web icon recommendations
+  - Social media icon sizes
+- **Location:** `/icon-size-calculator/index.html`
+
+### 33. HEX to RGB Converter
+Convert between different color format representations.
+- **Features:**
+  - Convert HEX to RGB, RGBA, HSL
+  - Color picker integration
+  - Visual color preview
+  - Support for 3-digit and 6-digit HEX
+  - Real-time conversions
+- **Location:** `/hex-rgb-converter/index.html`
+
+### 34. Screenshot Frame
+Add professional device frames to screenshots.
+- **Features:**
+  - Multiple device frame options
+  - Laptop, Phone, Tablet, Desktop frames
+  - Automatic shadow effects
+  - Download framed screenshots
+  - Drag and drop interface
+- **Location:** `/screenshot-frame/index.html`
+
 ## Design Theme
 
 Tools feature a **retro pixel aesthetic** with VT323 monospace font and two available color themes:

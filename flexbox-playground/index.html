@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLEXBOX PLAYGROUND</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <script src="../theme.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ FLEXBOX PLAYGROUND ◆</h1>
+            <p class="subtitle">Experiment with flexbox properties</p>
+        </header>
+        <main class="main-content">
+            <div class="pixel-panel">
+                <div class="panel-header"><span class="panel-title">◢ FLEXBOX CONTROLS ◣</span></div>
+                <div class="panel-content">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-lg);">
+                        <div>
+                            <label style="display: block; margin-bottom: var(--space-xs); font-weight: bold; color: var(--color-primary);">FLEX-DIRECTION</label>
+                            <select id="flexDirection" style="width: 100%; padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <option>row</option><option>column</option><option>row-reverse</option><option>column-reverse</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: var(--space-xs); font-weight: bold; color: var(--color-primary);">JUSTIFY-CONTENT</label>
+                            <select id="justifyContent" style="width: 100%; padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <option>flex-start</option><option>center</option><option>flex-end</option><option>space-between</option><option>space-around</option><option>space-evenly</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: var(--space-xs); font-weight: bold; color: var(--color-primary);">ALIGN-ITEMS</label>
+                            <select id="alignItems" style="width: 100%; padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <option>stretch</option><option>flex-start</option><option>center</option><option>flex-end</option><option>baseline</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: var(--space-xs); font-weight: bold; color: var(--color-primary);">FLEX-WRAP</label>
+                            <select id="flexWrap" style="width: 100%; padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                                <option>nowrap</option><option>wrap</option><option>wrap-reverse</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: var(--space-xs); font-weight: bold; color: var(--color-primary);">GAP (px)</label>
+                            <input type="number" id="gap" value="10" min="0" style="width: 100%; padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                        </div>
+                    </div>
+                    <div id="preview" style="border: 3px dashed var(--color-border); padding: var(--space-lg); background: var(--color-input-bg); min-height: 300px; display: flex;"></div>
+                    <div id="cssOutput" style="margin-top: var(--space-lg); padding: var(--space-md); border: 2px dashed var(--color-border); background: var(--color-input-bg); font-family: monospace; white-space: pre; overflow-x: auto;"></div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer pixel-text">
+            <p>▼ FLEXBOX PLAYGROUND ▼</p>
+            <div class="footer-links">
+                <span>Made by <a href="https://www.linkedin.com/in/navaneeth-sankar-k-p" target="_blank" rel="noopener noreferrer">Navaneeth Sankar K P</a></span>
+                <span>|</span>
+                <span><a href="https://github.com/navuxneeth/EpicUXTools" target="_blank" rel="noopener noreferrer">Github Repo</a></span>
+            </div>
+            <p class="footer-copyright">Copyright © 2025</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

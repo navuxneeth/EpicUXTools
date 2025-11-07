@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCREENSHOT FRAME</title>
+    <link rel="stylesheet" href="../shared-styles.css">
+    <script src="../theme.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="pixel-text">◆ SCREENSHOT FRAME ◆</h1>
+            <p class="subtitle">Add device frames to screenshots</p>
+        </header>
+        <main class="main-content">
+            <div class="pixel-panel">
+                <div class="panel-header"><span class="panel-title">◢ ADD FRAME ◣</span></div>
+                <div class="panel-content">
+                    <div style="border: 3px dashed var(--color-border); padding: var(--space-xl); text-align: center; background: var(--color-panel-bg); cursor: pointer; margin-bottom: var(--space-lg);" id="uploadZone">
+                        <h2>► DRAG & DROP SCREENSHOT HERE ◄</h2>
+                        <p>or click to browse</p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div style="margin-bottom: var(--space-lg);">
+                        <label style="display: block; margin-bottom: var(--space-sm); font-weight: bold; color: var(--color-primary);">DEVICE FRAME</label>
+                        <select id="frameType" style="width: 100%; padding: var(--space-sm); border: 2px dashed var(--color-border); background: var(--color-input-bg); color: var(--color-text); font-family: 'VT323', monospace;">
+                            <option value="laptop">Laptop</option>
+                            <option value="phone">Phone</option>
+                            <option value="tablet">Tablet</option>
+                            <option value="desktop">Desktop</option>
+                        </select>
+                    </div>
+                    <canvas id="canvas" style="display: none; max-width: 100%; border: 2px dashed var(--color-border);"></canvas>
+                    <button class="pixel-button" id="downloadBtn" style="width: 100%; display: none;" onclick="download()">► DOWNLOAD ◄</button>
+                </div>
+            </div>
+        </main>
+        <footer class="footer pixel-text">
+            <p>▼ SCREENSHOT FRAME ▼</p>
+            <div class="footer-links">
+                <span>Made by <a href="https://www.linkedin.com/in/navaneeth-sankar-k-p" target="_blank" rel="noopener noreferrer">Navaneeth Sankar K P</a></span>
+                <span>|</span>
+                <span><a href="https://github.com/navuxneeth/EpicUXTools" target="_blank" rel="noopener noreferrer">Github Repo</a></span>
+            </div>
+            <p class="footer-copyright">Copyright © 2025</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
